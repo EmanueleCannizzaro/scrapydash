@@ -1,0 +1,685 @@
+{% extends "base_modern.html" %}
+
+{% block title %}Schedule Spider{% endblock %}
+
+{% block extra_head %}
+<style>
+    .schedule-header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--light-color);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .form-input {
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-select {
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .form-textarea {
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        resize: vertical;
+        min-height: 100px;
+        font-family: 'Courier New', monospace;
+    }
+
+    .form-help {
+        font-size: 0.75rem;
+        color: var(--secondary-color);
+        margin-top: 0.25rem;
+    }
+
+    .server-selection {
+        background: var(--light-color);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .server-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .server-checkbox {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .server-checkbox:hover {
+        border-color: var(--primary-color);
+        background: #f8fafc;
+    }
+
+    .server-checkbox input[type="checkbox"] {
+        margin-right: 0.75rem;
+        transform: scale(1.2);
+    }
+
+    .server-checkbox.selected {
+        border-color: var(--primary-color);
+        background: rgba(37, 99, 235, 0.05);
+    }
+
+    .schedule-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .schedule-option {
+        padding: 1.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+    }
+
+    .schedule-option:hover {
+        border-color: var(--primary-color);
+    }
+
+    .schedule-option.selected {
+        border-color: var(--primary-color);
+        background: rgba(37, 99, 235, 0.05);
+    }
+
+    .schedule-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+    }
+
+    .schedule-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .schedule-desc {
+        font-size: 0.875rem;
+        color: var(--secondary-color);
+    }
+
+    .datetime-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .cron-builder {
+        background: var(--light-color);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    .cron-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .cron-field {
+        text-align: center;
+    }
+
+    .cron-input {
+        width: 100%;
+        text-align: center;
+        font-family: 'Courier New', monospace;
+    }
+
+    .cron-preview {
+        background: white;
+        padding: 1rem;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-schedule {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-schedule:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .btn-preview {
+        background: var(--secondary-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .recent-jobs {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+    }
+
+    .job-item {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .job-item:last-child {
+        border-bottom: none;
+    }
+
+    .job-details {
+        flex: 1;
+    }
+
+    .job-name {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+
+    .job-meta {
+        font-size: 0.75rem;
+        color: var(--secondary-color);
+    }
+
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .datetime-inputs {
+            grid-template-columns: 1fr;
+        }
+        
+        .cron-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Schedule Header -->
+<div class="schedule-header">
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <h1 class="mb-2">Schedule Spider</h1>
+            <p class="mb-0 opacity-90">Schedule spider jobs to run immediately or at specific times</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light btn-sm">
+                <i class="fas fa-history me-1"></i>Recent Jobs
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Server Selection -->
+<div class="form-section">
+    <div class="section-title">
+        <i class="fas fa-server me-2"></i>Select Servers
+    </div>
+    <div class="server-selection">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="form-label">Choose which servers to run the spider on:</span>
+            <div>
+                <button class="btn btn-sm btn-outline-primary me-2" onclick="selectAllServers()">Select All</button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="clearAllServers()">Clear All</button>
+            </div>
+        </div>
+        <div class="server-grid">
+            {% for server in SCRAPYD_SERVERS %}
+            <label class="server-checkbox">
+                <input type="checkbox" name="servers" value="{{ loop.index }}" {% if loop.index == 1 %}checked{% endif %}>
+                <div>
+                    <div class="fw-medium">[{{ loop.index }}] Server {{ loop.index }}</div>
+                    <div class="text-muted small">{{ server }}</div>
+                </div>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Spider Configuration -->
+<div class="form-section">
+    <div class="section-title">
+        <i class="fas fa-spider me-2"></i>Spider Configuration
+    </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label class="form-label">Project *</label>
+            <select class="form-select" id="project" required>
+                <option value="">Select a project</option>
+                <option value="quotes_project">quotes_project</option>
+                <option value="books_project">books_project</option>
+                <option value="news_project">news_project</option>
+                <option value="ecommerce_project">ecommerce_project</option>
+            </select>
+            <div class="form-help">Choose the project containing your spider</div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Spider *</label>
+            <select class="form-select" id="spider" required>
+                <option value="">Select a spider</option>
+                <option value="quotes_spider">quotes_spider</option>
+                <option value="books_spider">books_spider</option>
+                <option value="news_spider">news_spider</option>
+            </select>
+            <div class="form-help">Select the spider to run</div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Version</label>
+            <select class="form-select" id="version">
+                <option value="latest">latest</option>
+                <option value="1.0.0">1.0.0</option>
+                <option value="0.9.0">0.9.0</option>
+            </select>
+            <div class="form-help">Project version to use</div>
+        </div>
+        
+        <div class="form-group">
+            <label class="form-label">Job ID</label>
+            <input type="text" class="form-input" id="jobid" placeholder="Auto-generated if empty">
+            <div class="form-help">Custom job identifier (optional)</div>
+        </div>
+    </div>
+    
+    <div class="form-group mt-3">
+        <label class="form-label">Spider Arguments</label>
+        <textarea class="form-textarea" id="spider-args" placeholder='{"start_urls": ["http://example.com"], "max_pages": 100}'></textarea>
+        <div class="form-help">JSON format spider arguments (optional)</div>
+    </div>
+</div>
+
+<!-- Schedule Options -->
+<div class="form-section">
+    <div class="section-title">
+        <i class="fas fa-clock me-2"></i>Schedule Options
+    </div>
+    
+    <div class="schedule-options">
+        <div class="schedule-option selected" data-type="now">
+            <div class="schedule-icon">
+                <i class="fas fa-play"></i>
+            </div>
+            <div class="schedule-title">Run Now</div>
+            <div class="schedule-desc">Start the spider immediately</div>
+        </div>
+        
+        <div class="schedule-option" data-type="datetime">
+            <div class="schedule-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="schedule-title">Schedule for Later</div>
+            <div class="schedule-desc">Run at a specific date and time</div>
+        </div>
+        
+        <div class="schedule-option" data-type="cron">
+            <div class="schedule-icon">
+                <i class="fas fa-redo"></i>
+            </div>
+            <div class="schedule-title">Recurring Schedule</div>
+            <div class="schedule-desc">Run on a recurring schedule</div>
+        </div>
+    </div>
+    
+    <!-- DateTime Inputs -->
+    <div id="datetime-section" class="datetime-inputs" style="display: none;">
+        <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-input" id="schedule-date">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Time</label>
+            <input type="time" class="form-input" id="schedule-time">
+        </div>
+    </div>
+    
+    <!-- Cron Builder -->
+    <div id="cron-section" class="cron-builder" style="display: none;">
+        <div class="mb-3">
+            <label class="form-label">Cron Expression</label>
+            <div class="cron-grid">
+                <div class="cron-field">
+                    <label class="form-label small">Minute</label>
+                    <input type="text" class="form-input cron-input" id="cron-minute" value="0" placeholder="0-59">
+                </div>
+                <div class="cron-field">
+                    <label class="form-label small">Hour</label>
+                    <input type="text" class="form-input cron-input" id="cron-hour" value="*" placeholder="0-23">
+                </div>
+                <div class="cron-field">
+                    <label class="form-label small">Day</label>
+                    <input type="text" class="form-input cron-input" id="cron-day" value="*" placeholder="1-31">
+                </div>
+                <div class="cron-field">
+                    <label class="form-label small">Month</label>
+                    <input type="text" class="form-input cron-input" id="cron-month" value="*" placeholder="1-12">
+                </div>
+                <div class="cron-field">
+                    <label class="form-label small">Weekday</label>
+                    <input type="text" class="form-input cron-input" id="cron-weekday" value="*" placeholder="0-6">
+                </div>
+            </div>
+        </div>
+        <div class="cron-preview">
+            <strong>Cron Expression:</strong> <span id="cron-expression">0 * * * *</span><br>
+            <strong>Description:</strong> <span id="cron-description">Every hour</span>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <button class="btn-preview">
+        <i class="fas fa-eye me-1"></i>Preview
+    </button>
+    <button class="btn-schedule">
+        <i class="fas fa-rocket me-1"></i>Schedule Spider
+    </button>
+</div>
+
+<!-- Recent Jobs Sidebar -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="recent-jobs">
+            <h5 class="mb-3">Recent Scheduled Jobs</h5>
+            <div class="job-item">
+                <div class="job-details">
+                    <div class="job-name">quotes_spider</div>
+                    <div class="job-meta">quotes_project • Scheduled 2 hours ago</div>
+                </div>
+                <span class="status-badge status-running">Running</span>
+            </div>
+            <div class="job-item">
+                <div class="job-details">
+                    <div class="job-name">books_spider</div>
+                    <div class="job-meta">books_project • Scheduled 1 day ago</div>
+                </div>
+                <span class="status-badge status-finished">Finished</span>
+            </div>
+            <div class="job-item">
+                <div class="job-details">
+                    <div class="job-name">news_spider</div>
+                    <div class="job-meta">news_project • Scheduled 3 days ago</div>
+                </div>
+                <span class="status-badge status-failed">Failed</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Schedule option selection
+    document.querySelectorAll('.schedule-option').forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove selected class from all options
+            document.querySelectorAll('.schedule-option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            
+            // Show/hide relevant sections
+            const type = this.dataset.type;
+            document.getElementById('datetime-section').style.display = type === 'datetime' ? 'grid' : 'none';
+            document.getElementById('cron-section').style.display = type === 'cron' ? 'block' : 'none';
+        });
+    });
+    
+    // Server selection
+    function selectAllServers() {
+        document.querySelectorAll('input[name="servers"]').forEach(checkbox => {
+            checkbox.checked = true;
+            checkbox.closest('.server-checkbox').classList.add('selected');
+        });
+    }
+    
+    function clearAllServers() {
+        document.querySelectorAll('input[name="servers"]').forEach(checkbox => {
+            checkbox.checked = false;
+            checkbox.closest('.server-checkbox').classList.remove('selected');
+        });
+    }
+    
+    // Update server checkbox styling
+    document.querySelectorAll('input[name="servers"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                this.closest('.server-checkbox').classList.add('selected');
+            } else {
+                this.closest('.server-checkbox').classList.remove('selected');
+            }
+        });
+        
+        // Initialize styling
+        if (checkbox.checked) {
+            checkbox.closest('.server-checkbox').classList.add('selected');
+        }
+    });
+    
+    // Cron expression builder
+    function updateCronExpression() {
+        const minute = document.getElementById('cron-minute').value || '*';
+        const hour = document.getElementById('cron-hour').value || '*';
+        const day = document.getElementById('cron-day').value || '*';
+        const month = document.getElementById('cron-month').value || '*';
+        const weekday = document.getElementById('cron-weekday').value || '*';
+        
+        const expression = `${minute} ${hour} ${day} ${month} ${weekday}`;
+        document.getElementById('cron-expression').textContent = expression;
+        
+        // Simple description generator
+        let description = 'Custom schedule';
+        if (expression === '0 * * * *') description = 'Every hour';
+        else if (expression === '0 0 * * *') description = 'Daily at midnight';
+        else if (expression === '0 0 * * 0') description = 'Weekly on Sunday at midnight';
+        else if (expression === '0 0 1 * *') description = 'Monthly on the 1st at midnight';
+        
+        document.getElementById('cron-description').textContent = description;
+    }
+    
+    // Update cron expression when inputs change
+    document.querySelectorAll('.cron-input').forEach(input => {
+        input.addEventListener('input', updateCronExpression);
+    });
+    
+    // Project/Spider dependency
+    document.getElementById('project').addEventListener('change', function() {
+        const spiderSelect = document.getElementById('spider');
+        spiderSelect.innerHTML = '<option value="">Select a spider</option>';
+        
+        // Simulate loading spiders based on project
+        if (this.value) {
+            const spiders = {
+                'quotes_project': ['quotes_spider', 'quotes_advanced'],
+                'books_project': ['books_spider', 'books_detailed'],
+                'news_project': ['news_spider', 'news_crawler'],
+                'ecommerce_project': ['products_spider', 'categories_spider']
+            };
+            
+            if (spiders[this.value]) {
+                spiders[this.value].forEach(spider => {
+                    const option = document.createElement('option');
+                    option.value = spider;
+                    option.textContent = spider;
+                    spiderSelect.appendChild(option);
+                });
+            }
+        }
+    });
+    
+    // Form validation and submission
+    document.querySelector('.btn-schedule').addEventListener('click', function() {
+        const project = document.getElementById('project').value;
+        const spider = document.getElementById('spider').value;
+        const selectedServers = Array.from(document.querySelectorAll('input[name="servers"]:checked')).map(cb => cb.value);
+        
+        if (!project) {
+            alert('Please select a project');
+            return;
+        }
+        
+        if (!spider) {
+            alert('Please select a spider');
+            return;
+        }
+        
+        if (selectedServers.length === 0) {
+            alert('Please select at least one server');
+            return;
+        }
+        
+        // Get schedule type
+        const scheduleType = document.querySelector('.schedule-option.selected').dataset.type;
+        
+        const formData = {
+            project,
+            spider,
+            version: document.getElementById('version').value,
+            jobid: document.getElementById('jobid').value,
+            args: document.getElementById('spider-args').value,
+            servers: selectedServers,
+            scheduleType
+        };
+        
+        if (scheduleType === 'datetime') {
+            formData.date = document.getElementById('schedule-date').value;
+            formData.time = document.getElementById('schedule-time').value;
+        } else if (scheduleType === 'cron') {
+            formData.cronExpression = document.getElementById('cron-expression').textContent;
+        }
+        
+        console.log('Scheduling spider:', formData);
+        
+        // Show loading state
+        this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Scheduling...';
+        
+        // Simulate API call
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-rocket me-1"></i>Schedule Spider';
+            alert('Spider scheduled successfully!');
+        }, 2000);
+    });
+    
+    // Preview functionality
+    document.querySelector('.btn-preview').addEventListener('click', function() {
+        const project = document.getElementById('project').value;
+        const spider = document.getElementById('spider').value;
+        
+        if (!project || !spider) {
+            alert('Please select project and spider first');
+            return;
+        }
+        
+        // Show preview modal or navigate to preview page
+        console.log('Showing preview for:', project, spider);
+    });
+    
+    // Initialize datetime inputs with current date/time
+    const now = new Date();
+    document.getElementById('schedule-date').value = now.toISOString().split('T')[0];
+    document.getElementById('schedule-time').value = now.toTimeString().slice(0, 5);
+</script>
+{% endblock %}

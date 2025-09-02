@@ -1,0 +1,238 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scrapydweb"
+version = "1.6.0"
+description = "Web app for Scrapyd cluster management, with support for Scrapy log analysis & visualization."
+readme = "README.md"
+license = "GPL-3.0"
+authors = [
+    { name = "my8100", email = "my8100@gmail.com" }
+]
+maintainers = [
+    { name = "my8100", email = "my8100@gmail.com" }
+]
+keywords = ["scrapy", "scrapyd", "web", "monitoring", "cluster", "management"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Flask",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Monitoring",
+]
+requires-python = ">=3.13"
+dependencies = [
+    "APScheduler>=3.6.0",
+    "click>=7.1.2",
+    "colorama>=0.4.0",
+    # "Flask>=2.0.0",
+    # "Flask-Compress>=1.4.0",
+    # "Flask-SQLAlchemy>=2.4.0",
+    "idna>=2.7",
+    "itsdangerous>=2.0.0",
+    "Jinja2>=3.0.0",
+    "logparser>=0.8.4",
+    "MarkupSafe>=2.0.0",
+    "pexpect>=4.7.0",
+    "ptyprocess>=0.6.0",
+    "pytz>=2018.9",
+    "requests>=2.21.0",
+    "setuptools>=40.6.3",
+    "six>=1.16.0",
+    "SQLAlchemy>=1.3.24",
+    "tzlocal>=1.5.1",
+    "w3lib>=2.0.0",
+    # "Werkzeug>=2.0.0",
+    "uvicorn[standard]>=0.23.0",
+    "fastapi>=0.100.0",
+    "python-multipart>=0.0.6",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+]
+
+[project.optional-dependencies]
+# FastAPI migration dependencies
+fastapi = [
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.23.0",
+    "python-multipart>=0.0.6",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+]
+# Development dependencies
+dev = [
+    "pytest>=6.0.0",
+    "pytest-cov>=2.10.0",
+    # "black>=22.0.0",
+    "isort>=5.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.910",
+    "pre-commit>=2.15.0",
+]
+# Testing dependencies
+test = [
+    "pytest>=6.0.0",
+    "pytest-cov>=2.10.0",
+    "pytest-mock>=3.6.0",
+    "requests-mock>=1.9.0",
+    "coverage>=6.0.0",
+]
+# Documentation dependencies
+docs = [
+    "sphinx>=4.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "myst-parser>=0.17.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/my8100/scrapydweb"
+Repository = "https://github.com/my8100/scrapydweb"
+Documentation = "https://github.com/my8100/scrapydweb/blob/master/README.md"
+"Bug Tracker" = "https://github.com/my8100/scrapydweb/issues"
+Changelog = "https://github.com/my8100/scrapydweb/blob/master/HISTORY.md"
+
+[project.scripts]
+scrapydweb = "scrapydweb.run:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["scrapydweb"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/scrapydweb",
+    "/tests",
+    "/README.md",
+    "/HISTORY.md",
+    "/LICENSE",
+    "/requirements.txt",
+    "/requirements-tests.txt",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py36', 'py37', 'py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["scrapydweb"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "setup.py",
+    "scrapydweb/data/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ >= .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.mypy]
+python_version = "3.6"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+disallow_untyped_decorators = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "APScheduler.*",
+    "logparser.*",
+    "w3lib.*",
+    "pexpect.*",
+    "ptyprocess.*",
+]
+ignore_missing_imports = true
+
+[tool.flake8]
+max-line-length = 120
+extend-ignore = ["E203", "W503", "E501"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".eggs",
+    "*.egg-info",
+    ".venv",
+    ".tox",
+]
+
+# uv-specific configuration
+[tool.uv]
+dev-dependencies = [
+    "pytest>=6.0.0",
+    "pytest-cov>=2.10.0",
+    "black>=22.0.0",
+    "isort>=5.0.0",
+    "flake8>=4.0.0",
+    "mypy>=0.910",
+    "pre-commit>=2.15.0",
+]

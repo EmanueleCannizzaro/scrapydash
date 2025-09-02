@@ -1,0 +1,550 @@
+{% extends "base_modern.html" %}
+
+{% block title %}Jobs{% endblock %}
+
+{% block extra_head %}
+<style>
+    .jobs-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 2rem;
+    }
+
+    .job-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-text {
+        font-size: 0.875rem;
+        opacity: 0.9;
+    }
+
+    .jobs-table {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .table-header {
+        background: var(--light-color);
+        padding: 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .job-row {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        transition: all 0.2s ease;
+    }
+
+    .job-row:hover {
+        background: #f8fafc;
+    }
+
+    .job-row:last-child {
+        border-bottom: none;
+    }
+
+    .job-info {
+        display: grid;
+        grid-template-columns: 1fr 150px 120px 100px 120px;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .job-name {
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+
+    .job-project {
+        font-size: 0.875rem;
+        color: var(--secondary-color);
+        margin-top: 0.25rem;
+    }
+
+    .job-status {
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .status-running {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-finished {
+        background: #e0e7ff;
+        color: #3730a3;
+    }
+
+    .status-failed {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .job-duration {
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+        color: var(--secondary-color);
+    }
+
+    .job-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn-small {
+        padding: 0.25rem 0.5rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-view {
+        background: var(--info-color);
+        color: white;
+    }
+
+    .btn-stop {
+        background: var(--danger-color);
+        color: white;
+    }
+
+    .btn-logs {
+        background: var(--secondary-color);
+        color: white;
+    }
+
+    .action-btn-small:hover {
+        transform: translateY(-1px);
+        opacity: 0.9;
+    }
+
+    .filters-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .filter-input {
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 0.875rem;
+    }
+
+    .filter-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+
+    .page-btn {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #e2e8f0;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .page-btn:hover {
+        background: var(--light-color);
+    }
+
+    .page-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--secondary-color);
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    @media (max-width: 768px) {
+        .job-info {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+        
+        .jobs-header {
+            padding: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Jobs Header -->
+<div class="jobs-header">
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <h1 class="mb-2">Jobs Dashboard</h1>
+            <p class="mb-0 opacity-90">Monitor and manage your spider jobs across all servers</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light btn-sm">
+                <i class="fas fa-sync-alt me-1"></i>Refresh
+            </button>
+            <button class="btn btn-light btn-sm">
+                <i class="fas fa-download me-1"></i>Export
+            </button>
+        </div>
+    </div>
+    
+    <div class="job-stats">
+        <div class="stat-card">
+            <div class="stat-number">5</div>
+            <div class="stat-text">Running Jobs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">12</div>
+            <div class="stat-text">Pending Jobs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">248</div>
+            <div class="stat-text">Completed Today</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-text">Failed Jobs</div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-section">
+    <div class="filter-grid">
+        <div class="filter-group">
+            <label class="filter-label">Project</label>
+            <select class="filter-input">
+                <option value="">All Projects</option>
+                <option value="project1">Project 1</option>
+                <option value="project2">Project 2</option>
+                <option value="project3">Project 3</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select class="filter-input">
+                <option value="">All Status</option>
+                <option value="running">Running</option>
+                <option value="pending">Pending</option>
+                <option value="finished">Finished</option>
+                <option value="failed">Failed</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Spider</label>
+            <input type="text" class="filter-input" placeholder="Filter by spider name">
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Server</label>
+            <select class="filter-input">
+                <option value="">All Servers</option>
+                {% for server in SCRAPYD_SERVERS %}
+                <option value="{{ loop.index }}">[{{ loop.index }}] {{ server }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <button class="btn btn-primary-modern">
+                <i class="fas fa-filter me-1"></i>Apply Filters
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Jobs Table -->
+<div class="jobs-table">
+    <div class="table-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Active Jobs</h5>
+            <span class="text-muted">Showing 1-10 of 25 jobs</span>
+        </div>
+    </div>
+    
+    <!-- Sample Job Rows -->
+    <div class="job-row">
+        <div class="job-info">
+            <div>
+                <div class="job-name">quotes_spider</div>
+                <div class="job-project">quotes_project • Server 1</div>
+            </div>
+            <div class="job-status status-running">Running</div>
+            <div class="job-duration">00:15:32</div>
+            <div>2.5k items</div>
+            <div class="job-actions">
+                <button class="action-btn-small btn-view" title="View Details">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn-small btn-stop" title="Stop Job">
+                    <i class="fas fa-stop"></i>
+                </button>
+                <button class="action-btn-small btn-logs" title="View Logs">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="job-row">
+        <div class="job-info">
+            <div>
+                <div class="job-name">books_spider</div>
+                <div class="job-project">books_project • Server 2</div>
+            </div>
+            <div class="job-status status-pending">Pending</div>
+            <div class="job-duration">--:--:--</div>
+            <div>0 items</div>
+            <div class="job-actions">
+                <button class="action-btn-small btn-view" title="View Details">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn-small btn-logs" title="View Logs">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="job-row">
+        <div class="job-info">
+            <div>
+                <div class="job-name">news_spider</div>
+                <div class="job-project">news_project • Server 1</div>
+            </div>
+            <div class="job-status status-finished">Finished</div>
+            <div class="job-duration">01:23:45</div>
+            <div>15.2k items</div>
+            <div class="job-actions">
+                <button class="action-btn-small btn-view" title="View Details">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn-small btn-logs" title="View Logs">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="job-row">
+        <div class="job-info">
+            <div>
+                <div class="job-name">products_spider</div>
+                <div class="job-project">ecommerce_project • Server 3</div>
+            </div>
+            <div class="job-status status-failed">Failed</div>
+            <div class="job-duration">00:05:12</div>
+            <div>0 items</div>
+            <div class="job-actions">
+                <button class="action-btn-small btn-view" title="View Details">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn-small btn-logs" title="View Logs">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="job-row">
+        <div class="job-info">
+            <div>
+                <div class="job-name">social_spider</div>
+                <div class="job-project">social_project • Server 2</div>
+            </div>
+            <div class="job-status status-running">Running</div>
+            <div class="job-duration">02:45:18</div>
+            <div>8.7k items</div>
+            <div class="job-actions">
+                <button class="action-btn-small btn-view" title="View Details">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn-small btn-stop" title="Stop Job">
+                    <i class="fas fa-stop"></i>
+                </button>
+                <button class="action-btn-small btn-logs" title="View Logs">
+                    <i class="fas fa-file-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="pagination">
+    <button class="page-btn">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Auto-refresh job status every 10 seconds
+    function refreshJobStatus() {
+        // In a real implementation, this would fetch data from the API
+        console.log('Refreshing job status...');
+        
+        // Update running job durations
+        document.querySelectorAll('.status-running').forEach(status => {
+            const row = status.closest('.job-row');
+            const durationEl = row.querySelector('.job-duration');
+            if (durationEl && durationEl.textContent !== '--:--:--') {
+                // Simulate time increment
+                const parts = durationEl.textContent.split(':');
+                let seconds = parseInt(parts[2]) + 1;
+                let minutes = parseInt(parts[1]);
+                let hours = parseInt(parts[0]);
+                
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes++;
+                }
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+                
+                durationEl.textContent = 
+                    String(hours).padStart(2, '0') + ':' +
+                    String(minutes).padStart(2, '0') + ':' +
+                    String(seconds).padStart(2, '0');
+            }
+        });
+    }
+    
+    // Start auto-refresh
+    setInterval(refreshJobStatus, 10000);
+    
+    // Filter functionality
+    document.querySelector('.filter-grid .btn').addEventListener('click', function() {
+        const filters = {
+            project: document.querySelector('select[class*="filter-input"]').value,
+            status: document.querySelectorAll('select[class*="filter-input"]')[1].value,
+            spider: document.querySelector('input[class*="filter-input"]').value,
+            server: document.querySelectorAll('select[class*="filter-input"]')[2].value
+        };
+        
+        console.log('Applying filters:', filters);
+        // In a real implementation, this would filter the job list
+    });
+    
+    // Job action handlers
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-stop')) {
+            const jobRow = e.target.closest('.job-row');
+            const jobName = jobRow.querySelector('.job-name').textContent;
+            
+            if (confirm(`Are you sure you want to stop the job "${jobName}"?`)) {
+                console.log('Stopping job:', jobName);
+                // In a real implementation, this would call the stop API
+            }
+        }
+        
+        if (e.target.closest('.btn-view')) {
+            const jobRow = e.target.closest('.job-row');
+            const jobName = jobRow.querySelector('.job-name').textContent;
+            console.log('Viewing job details:', jobName);
+            // In a real implementation, this would open job details modal or page
+        }
+        
+        if (e.target.closest('.btn-logs')) {
+            const jobRow = e.target.closest('.job-row');
+            const jobName = jobRow.querySelector('.job-name').textContent;
+            console.log('Viewing logs for:', jobName);
+            // In a real implementation, this would open logs page
+        }
+    });
+    
+    // Refresh button
+    document.querySelector('.jobs-header .btn:first-child').addEventListener('click', function() {
+        this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Refreshing...';
+        
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-sync-alt me-1"></i>Refresh';
+            refreshJobStatus();
+        }, 1000);
+    });
+</script>
+{% endblock %}
