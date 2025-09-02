@@ -1,29 +1,29 @@
-:abc: English | [:mahjong: 简体中文](https://github.com/my8100/scrapydweb/blob/master/README_CN.md)
+:abc: English | [:mahjong: 简体中文](https://github.com/EmanueleCannizzaro0/scrapydash/blob/master/README_CN.md)
 
 # ScrapydWeb: Web app for Scrapyd cluster management, with support for Scrapy log analysis & visualization.
 
-[![PyPI - scrapydweb Version](https://img.shields.io/pypi/v/scrapydweb.svg)](https://pypi.org/project/scrapydweb/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scrapydweb.svg)](https://pypi.org/project/scrapydweb/)
-[![CircleCI](https://circleci.com/gh/my8100/scrapydweb/tree/master.svg?style=shield)](https://circleci.com/gh/my8100/scrapydweb/tree/master)
-[![codecov](https://codecov.io/gh/my8100/scrapydweb/branch/master/graph/badge.svg)](https://codecov.io/gh/my8100/scrapydweb)
-[![Coverage Status](https://coveralls.io/repos/github/my8100/scrapydweb/badge.svg?branch=master)](https://coveralls.io/github/my8100/scrapydweb?branch=master)
-[![Downloads - total](https://static.pepy.tech/badge/scrapydweb)](https://pepy.tech/project/scrapydweb)
-[![GitHub license](https://img.shields.io/github/license/my8100/scrapydweb.svg)](https://github.com/my8100/scrapydweb/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/my8100/scrapydweb.svg?style=social)](https://twitter.com/intent/tweet?text=@my8100_%20ScrapydWeb:%20Web%20app%20for%20Scrapyd%20cluster%20management,%20with%20support%20for%20Scrapy%20log%20analysis%20%26%20visualization.%20%23python%20%23scrapy%20%23scrapyd%20%23webscraping%20%23scrapydweb%20&url=https%3A%2F%2Fgithub.com%2Fmy8100%2Fscrapydweb)
+[![PyPI - scrapydash Version](https://img.shields.io/pypi/v/scrapydash.svg)](https://pypi.org/project/scrapydash/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scrapydash.svg)](https://pypi.org/project/scrapydash/)
+[![CircleCI](https://circleci.com/gh/EmanueleCannizzaro0/scrapydash/tree/master.svg?style=shield)](https://circleci.com/gh/EmanueleCannizzaro0/scrapydash/tree/master)
+[![codecov](https://codecov.io/gh/EmanueleCannizzaro0/scrapydash/branch/master/graph/badge.svg)](https://codecov.io/gh/EmanueleCannizzaro0/scrapydash)
+[![Coverage Status](https://coveralls.io/repos/github/EmanueleCannizzaro0/scrapydash/badge.svg?branch=master)](https://coveralls.io/github/EmanueleCannizzaro0/scrapydash?branch=master)
+[![Downloads - total](https://static.pepy.tech/badge/scrapydash)](https://pepy.tech/project/scrapydash)
+[![GitHub license](https://img.shields.io/github/license/EmanueleCannizzaro0/scrapydash.svg)](https://github.com/EmanueleCannizzaro0/scrapydash/blob/master/LICENSE)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/EmanueleCannizzaro0/scrapydash.svg?style=social)](https://twitter.com/intent/tweet?text=@EmanueleCannizzaro0_%20ScrapydWeb:%20Web%20app%20for%20Scrapyd%20cluster%20management,%20with%20support%20for%20Scrapy%20log%20analysis%20%26%20visualization.%20%23python%20%23scrapy%20%23scrapyd%20%23webscraping%20%23scrapydash%20&url=https%3A%2F%2Fgithub.com%2FEmanueleCannizzaro0%2Fscrapydash)
 
 
 ##
-![servers](https://raw.githubusercontent.com/my8100/scrapydweb/master/screenshots/servers.png)
+![servers](https://raw.githubusercontent.com/EmanueleCannizzaro0/scrapydash/master/screenshots/servers.png)
 
 ## Scrapyd :x: ScrapydWeb :x: LogParser
 ### :book: Recommended Reading
-[:link: How to efficiently manage your distributed web scraping projects](https://github.com/my8100/files/blob/master/scrapydweb/README.md)
+[:link: How to efficiently manage your distributed web scraping projects](https://github.com/EmanueleCannizzaro0/files/blob/master/scrapydash/README.md)
 
-[:link: How to set up Scrapyd cluster on Heroku](https://github.com/my8100/scrapyd-cluster-on-heroku)
+[:link: How to set up Scrapyd cluster on Heroku](https://github.com/EmanueleCannizzaro0/scrapyd-cluster-on-heroku)
 
 
 ## :eyes: Demo
-[:link: scrapydweb.herokuapp.com](https://scrapydweb.herokuapp.com)
+[:link: scrapydash.herokuapp.com](https://scrapydash.herokuapp.com)
 
 
 ## :rocket: Sponsor
@@ -47,7 +47,7 @@ with a discount using [this referral link](https://iproyal.com/?r=802099)!
 
 - :battery: Enhancements
   - :package: **Auto packaging**
-  - :male_detective: **Integrated with [:link: *LogParser*](https://github.com/my8100/logparser)**
+  - :male_detective: **Integrated with [:link: *LogParser*](https://github.com/EmanueleCannizzaro0/logparser)**
   - :alarm_clock: **Timer tasks**
   - :e-mail: **Monitor & Alert**
   - :iphone: Mobile UI
@@ -69,23 +69,23 @@ and restart Scrapyd to make it visible externally.
 ### :arrow_down: Install
 - Use pip:
 ```bash
-pip install scrapydweb
+pip install scrapydash
 ```
-:heavy_exclamation_mark: Note that you may need to execute `python -m pip install --upgrade pip` first in order to get the latest version of scrapydweb, or download the tar.gz file from https://pypi.org/project/scrapydweb/#files and get it installed via `pip install scrapydweb-x.x.x.tar.gz`
+:heavy_exclamation_mark: Note that you may need to execute `python -m pip install --upgrade pip` first in order to get the latest version of scrapydash, or download the tar.gz file from https://pypi.org/project/scrapydash/#files and get it installed via `pip install scrapydash-x.x.x.tar.gz`
 
 - Use git:
 ```bash
-pip install --upgrade git+https://github.com/my8100/scrapydweb.git
+pip install --upgrade git+https://github.com/EmanueleCannizzaro0/scrapydash.git
 ```
 Or:
 ```bash
-git clone https://github.com/my8100/scrapydweb.git
-cd scrapydweb
+git clone https://github.com/EmanueleCannizzaro0/scrapydash.git
+cd scrapydash
 python setup.py install
 ```
 
 ### :arrow_forward: Start
-1. Start ScrapydWeb via command `scrapydweb`. (a config file would be generated for customizing settings at the first startup.)
+1. Start ScrapydWeb via command `scrapydash`. (a config file would be generated for customizing settings at the first startup.)
 2. Visit http://127.0.0.1:5000 **(It's recommended to use Google Chrome for a better experience.)**
 
 ### :globe_with_meridians: Browser Support
@@ -101,30 +101,30 @@ The latest version of Google Chrome, Firefox, and Safari.
 <br>
 
 ```bash
-$ git clone https://github.com/my8100/scrapydweb.git
-$ cd scrapydweb
+$ git clone https://github.com/EmanueleCannizzaro0/scrapydash.git
+$ cd scrapydash
 
 # To create isolated Python environments
 $ pip install virtualenv
-$ virtualenv venv/scrapydweb
-# Or specify your Python interpreter: $ virtualenv -p /usr/local/bin/python3.7 venv/scrapydweb
-$ source venv/scrapydweb/bin/activate
+$ virtualenv venv/scrapydash
+# Or specify your Python interpreter: $ virtualenv -p /usr/local/bin/python3.7 venv/scrapydash
+$ source venv/scrapydash/bin/activate
 
 # Install dependent libraries
-(scrapydweb) $ python setup.py install
-(scrapydweb) $ pip install pytest
-(scrapydweb) $ pip install coverage
+(scrapydash) $ python setup.py install
+(scrapydash) $ pip install pytest
+(scrapydash) $ pip install coverage
 
 # Make sure Scrapyd has been installed and started, then update the custom_settings item in tests/conftest.py
-(scrapydweb) $ vi tests/conftest.py
-(scrapydweb) $ curl http://127.0.0.1:6800
+(scrapydash) $ vi tests/conftest.py
+(scrapydash) $ curl http://127.0.0.1:6800
 
 # '-x': stop on first failure
-(scrapydweb) $ coverage run --source=scrapydweb -m pytest tests/test_a_factory.py -s -vv -x
-(scrapydweb) $ coverage run --source=scrapydweb -m pytest tests -s -vv --disable-warnings
-(scrapydweb) $ coverage report
+(scrapydash) $ coverage run --source=scrapydash -m pytest tests/test_a_factory.py -s -vv -x
+(scrapydash) $ coverage run --source=scrapydash -m pytest tests -s -vv --disable-warnings
+(scrapydash) $ coverage report
 # To create an HTML report, check out htmlcov/index.html
-(scrapydweb) $ coverage html
+(scrapydash) $ coverage html
 ```
 
 </details>
@@ -147,11 +147,11 @@ $ source venv/scrapydweb/bin/activate
 
 
 ## :clipboard: Changelog
-Detailed changes for each release are documented in the [:link: HISTORY.md](https://github.com/my8100/scrapydweb/blob/master/HISTORY.md).
+Detailed changes for each release are documented in the [:link: HISTORY.md](https://github.com/EmanueleCannizzaro0/scrapydash/blob/master/HISTORY.md).
 
 
 ## :man_technologist: Author
-| [<img src="https://github.com/my8100.png" width="100px;"/>](https://github.com/my8100)<br/> [<sub>my8100</sub>](https://github.com/my8100) |
+| [<img src="https://github.com/EmanueleCannizzaro0.png" width="100px;"/>](https://github.com/EmanueleCannizzaro0)<br/> [<sub>EmanueleCannizzaro0</sub>](https://github.com/EmanueleCannizzaro0) |
 | --- |
 
 
@@ -161,8 +161,8 @@ Detailed changes for each release are documented in the [:link: HISTORY.md](http
 
 
 ## :copyright: License
-This project is licensed under the GNU General Public License v3.0 - see the [:link: LICENSE](https://github.com/my8100/scrapydweb/blob/master/LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [:link: LICENSE](https://github.com/EmanueleCannizzaro0/scrapydash/blob/master/LICENSE) file for details.
 
 
 ## :star: Stargazers over time
-[![Stargazers over time](https://starchart.cc/my8100/scrapydweb.svg?variant=adaptive)](https://starchart.cc/my8100/scrapydweb)
+[![Stargazers over time](https://starchart.cc/EmanueleCannizzaro0/scrapydash.svg?variant=adaptive)](https://starchart.cc/EmanueleCannizzaro0/scrapydash)

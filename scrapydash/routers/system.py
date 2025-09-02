@@ -54,8 +54,8 @@ async def settings_view(
     # Get all configuration categories
     settings_categories = {
         'ScrapydWeb Server': {
-            'SCRAPYDWEB_BIND': config.get('SCRAPYDWEB_BIND', '0.0.0.0'),
-            'SCRAPYDWEB_PORT': config.get('SCRAPYDWEB_PORT', 5000),
+            'SCRAPYDASH_BIND': config.get('SCRAPYDASH_BIND', '0.0.0.0'),
+            'SCRAPYDASH_PORT': config.get('SCRAPYDASH_PORT', 5000),
             'ENABLE_AUTH': config.get('ENABLE_AUTH', False),
             'USERNAME': config.get('USERNAME', ''),
             'PASSWORD': '********' if config.get('PASSWORD') else '',
@@ -103,7 +103,7 @@ async def settings_view(
         "request": request,
         "node": node,
         "settings_categories": settings_categories,
-        "scrapydweb_version": __version__,
+        "scrapydash_version": __version__,
         "python_version": PYTHON_VERSION,
         "scrapy_version": SCRAPY_VERSION,
         "scrapyd_version": SCRAPYD_VERSION,
@@ -111,7 +111,7 @@ async def settings_view(
         **template_context
     }
     
-    return templates.TemplateResponse("scrapydweb/settings.html", context)
+    return templates.TemplateResponse("settings.html", context)
 
 @router.get("/{node:int}/system-info")
 @router.get("/system-info")
@@ -127,7 +127,7 @@ async def system_info(
         "system": {
             "platform": platform.platform(),
             "python_version": PYTHON_VERSION,
-            "scrapydweb_version": __version__,
+            "scrapydash_version": __version__,
             "scrapy_version": SCRAPY_VERSION,
             "scrapyd_version": SCRAPYD_VERSION,
         },
@@ -207,8 +207,8 @@ async def server_status(
     return {
         "node": node,
         "servers": config.get('SCRAPYD_SERVERS', []),
-        "bind": config.get('SCRAPYDWEB_BIND', '0.0.0.0'),
-        "port": config.get('SCRAPYDWEB_PORT', 5000),
+        "bind": config.get('SCRAPYDASH_BIND', '0.0.0.0'),
+        "port": config.get('SCRAPYDASH_PORT', 5000),
         "auth_enabled": config.get('ENABLE_AUTH', False),
         "https_enabled": config.get('ENABLE_HTTPS', False),
     }

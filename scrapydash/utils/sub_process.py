@@ -95,7 +95,7 @@ def start_poll(config):
         sys.executable,
         os.path.join(CURRENT_DIR, 'poll.py'),
 
-        config['URL_SCRAPYDWEB'],
+        config['URL_SCRAPYDASH'],
         config.get('USERNAME', '') if config.get('ENABLE_AUTH', False) else '',
         config.get('PASSWORD', '') if config.get('ENABLE_AUTH', False) else '',
         json_dumps(config.get('SCRAPYD_SERVERS', ['127.0.0.1'])),

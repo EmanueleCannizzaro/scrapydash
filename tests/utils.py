@@ -11,11 +11,50 @@ import sys
 import time
 import zipfile
 
-from flask import url_for
+# from flask import url_for  # Removed for FastAPI migration
 from six import string_types
 
 from logparser import __version__ as logparser_version
-from scrapydweb.vars import DATABASE_PATH, LEGAL_NAME_PATTERN, STATS_PATH, setup_logfile
+from scrapydash.vars import DATABASE_PATH, LEGAL_NAME_PATTERN, STATS_PATH, setup_logfile
+
+
+def url_for(endpoint, **values):
+    """FastAPI compatibility URL generation for tests"""
+    # Basic URL mapping for test endpoints
+    url_map = {
+        'index': '/1/',
+        'servers': '/1/servers/',
+        'jobs': '/1/jobs/',
+        'schedule': '/1/schedule/',
+        'deploy': '/1/deploy/',
+        'deploy.upload': '/1/deploy/upload/',
+        'projects': '/1/projects/',
+        'logs': '/1/logs/',
+        'parse.upload': '/1/parse/upload/',
+        'settings': '/system/settings/',
+        'api.daemonstatus': '/api/daemonstatus/',
+        'api.listprojects': '/api/listprojects/',
+        'api.listspiders': '/api/listspiders/',
+    }
+    
+    # Handle node parameter
+    node = values.get('node', 1)
+    base_url = url_map.get(endpoint, f'/{endpoint}/')
+    
+    # Replace node placeholder if present
+    if '{node}' in base_url:
+        base_url = base_url.format(node=node)
+    elif base_url.startswith('/1/') and node != 1:
+        base_url = base_url.replace('/1/', f'/{node}/')
+    
+    # Handle other URL parameters
+    remaining_values = {k: v for k, v in values.items() if k != 'node'}
+    if remaining_values:
+        # Simple query string handling
+        query = '&'.join(f'{k}={v}' for k, v in remaining_values.items())
+        return f'{base_url}?{query}' if query else base_url
+    
+    return base_url
 
 
 class Constant(object):
@@ -243,10 +282,10 @@ def setup_env(custom_settings):
     if not os.path.isdir(local_scrapyd_logs_dir):
         sys.exit("custom_settings['LOCAL_SCRAPYD_LOGS_DIR'] not found: %s" % repr(local_scrapyd_logs_dir))
     else:
-        logs_scrapydweb_demo = os.path.join(local_scrapyd_logs_dir, cst.PROJECT)
-        if os.path.isdir(logs_scrapydweb_demo):
-            rmtree(logs_scrapydweb_demo, ignore_errors=True)
-            print("rmtree %s" % logs_scrapydweb_demo)
+        logs_scrapydash_demo = os.path.join(local_scrapyd_logs_dir, cst.PROJECT)
+        if os.path.isdir(logs_scrapydash_demo):
+            rmtree(logs_scrapydash_demo, ignore_errors=True)
+            print("rmtree %s" % logs_scrapydash_demo)
 
     data_folder = os.path.join(cst.ROOT_DIR, 'data')
     if os.path.isdir(data_folder):

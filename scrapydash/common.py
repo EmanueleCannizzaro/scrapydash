@@ -47,15 +47,15 @@ def authenticate():
                     401, {'WWW-Authenticate': 'Basic realm="ScrapydWeb Basic Auth Required"'})
 
 
-def find_scrapydweb_settings_py(filename, path, prevpath=None):
+def find_scrapydash_settings_py(filename, path, prevpath=None):
     if path == prevpath:
         return ''
     path = os.path.abspath(path)
     cfgfile = os.path.join(path, filename)
     if os.path.exists(cfgfile):
         return cfgfile
-    # In vars.py, try to import module scrapydweb_settings_vN in cwd only
-    # return find_scrapydweb_settings_py(filename, os.path.dirname(path), path)
+    # In vars.py, try to import module scrapydash_settings_vN in cwd only
+    # return find_scrapydash_settings_py(filename, os.path.dirname(path), path)
 
 
 def get_now_string(allow_space=False):

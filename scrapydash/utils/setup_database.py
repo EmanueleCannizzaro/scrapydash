@@ -4,20 +4,20 @@ import re
 import sys
 
 
-DB_APSCHEDULER = 'scrapydweb_apscheduler'
-DB_TIMERTASKS = 'scrapydweb_timertasks'
-DB_METADATA = 'scrapydweb_metadata'
-DB_JOBS = 'scrapydweb_jobs'
+DB_APSCHEDULER = 'scrapydash_apscheduler'
+DB_TIMERTASKS = 'scrapydash_timertasks'
+DB_METADATA = 'scrapydash_metadata'
+DB_JOBS = 'scrapydash_jobs'
 DBS = [DB_APSCHEDULER, DB_TIMERTASKS, DB_METADATA, DB_JOBS]
 
 PATTERN_MYSQL = re.compile(r'mysql://(.+?)(?::(.+?))?@(.+?):(\d+)')
 PATTERN_POSTGRESQL = re.compile(r'(?:postgres|postgresql)://(.+?)(?::(.+?))?@(.+?):(\d+)')
 PATTERN_SQLITE = re.compile(r'sqlite:///(.+)$')
 
-SCRAPYDWEB_TESTMODE = os.environ.get('SCRAPYDWEB_TESTMODE', 'False').lower() == 'true'
+SCRAPYDASH_TESTMODE = os.environ.get('SCRAPYDASH_TESTMODE', 'False').lower() == 'true'
 
 
-def test_database_url_pattern(database_url):
+def parse_database_url_pattern(database_url):
     m_mysql = PATTERN_MYSQL.match(database_url)
     m_postgres = PATTERN_POSTGRESQL.match(database_url)
     m_sqlite = PATTERN_SQLITE.match(database_url)
@@ -30,7 +30,7 @@ def setup_database(database_url, database_path):
     database_path = re.sub(r'\\', '/', database_path)
     database_path = re.sub(r'/$', '', database_path)
 
-    m_mysql, m_postgres, m_sqlite = test_database_url_pattern(database_url)
+    m_mysql, m_postgres, m_sqlite = parse_database_url_pattern(database_url)
     if m_mysql:
         setup_mysql(*m_mysql.groups())
     elif m_postgres:
@@ -60,7 +60,7 @@ def setup_database(database_url, database_path):
             'jobs': 'sqlite:///' + '/'.join([database_path, 'jobs.db'])
         }
 
-    if SCRAPYDWEB_TESTMODE:
+    if SCRAPYDASH_TESTMODE:
         print("DATABASE_PATH: %s" % database_path)
         print("APSCHEDULER_DATABASE_URI: %s" % APSCHEDULER_DATABASE_URI)
         print("SQLALCHEMY_DATABASE_URI: %s" % SQLALCHEMY_DATABASE_URI)
@@ -95,16 +95,16 @@ def setup_mysql(username, password, host, port):
     except (ImportError, AssertionError):
         sys.exit("Run command: %s" % install_command)
     else:
-        # Run scrapydweb: ModuleNotFoundError: No module named 'MySQLdb'
+        # Run scrapydash: ModuleNotFoundError: No module named 'MySQLdb'
         pymysql.install_as_MySQLdb()
 
     conn = pymysql.connect(host=host, port=int(port), user=username, password=password,
                            charset='utf8', cursorclass=pymysql.cursors.DictCursor)
     cur = conn.cursor()
     for dbname in DBS:
-        if SCRAPYDWEB_TESTMODE:
+        if SCRAPYDASH_TESTMODE:
             drop_database(cur, dbname)
-        # pymysql.err.ProgrammingError: (1007, "Can't create database 'scrapydweb_apscheduler'; database exists")
+        # pymysql.err.ProgrammingError: (1007, "Can't create database 'scrapydash_apscheduler'; database exists")
         # cur.execute("CREATE DATABASE IF NOT EXISTS %s CHARACTER SET 'utf8' COLLATE 'utf8_general_ci'" % dbname)
         try:
             cur.execute("CREATE DATABASE %s CHARACTER SET 'utf8' COLLATE 'utf8_general_ci'" % dbname)
@@ -119,7 +119,7 @@ def setup_mysql(username, password, host, port):
 
 def setup_postgresql(username, password, host, port):
     """
-    https://github.com/my8100/notes/blob/master/back_end/the-flask-mega-tutorial.md
+    https://github.com/EmanueleCannizzaro0/notes/blob/master/back_end/the-flask-mega-tutorial.md
     When working with database servers such as MySQL and PostgreSQL,
     you have to create the database in the database server before running upgrade.
     """
@@ -135,8 +135,8 @@ def setup_postgresql(username, password, host, port):
     conn.set_isolation_level(0)  # https://wiki.postgresql.org/wiki/Psycopg2_Tutorial
     cur = conn.cursor()
     for dbname in DBS:
-        if SCRAPYDWEB_TESTMODE:
-            # database "scrapydweb_apscheduler" is being accessed by other users
+        if SCRAPYDASH_TESTMODE:
+            # database "scrapydash_apscheduler" is being accessed by other users
             # DETAIL:  There is 1 other session using the database.
             # To restart postgres server on Windonws -> win+R: services.msc
             drop_database(cur, dbname)
@@ -159,7 +159,7 @@ def setup_postgresql(username, password, host, port):
             try:
                 cur.execute("CREATE DATABASE %s" % dbname)
             except Exception as err:
-                # psycopg2.ProgrammingError: database "scrapydweb_apscheduler" already exists
+                # psycopg2.ProgrammingError: database "scrapydash_apscheduler" already exists
                 if 'exists' in str(err):
                     pass
                 else:

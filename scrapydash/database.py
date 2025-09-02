@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from typing import Generator
 
 # Database configuration
-SQLALCHEMY_DATABASE_URL = "sqlite:///./scrapydweb.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./scrapydash.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 

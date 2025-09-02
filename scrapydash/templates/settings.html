@@ -1,0 +1,553 @@
+{% extends 'base_modern.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Settings</h1>
+            <p class="text-muted mb-0">ScrapydWeb configuration and system information</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ GITHUB_URL }}/blob/master/scrapydash/default_settings.py" target="_blank" class="btn btn-outline-info">
+                <i class="fas fa-external-link-alt me-2"></i>Default Settings
+            </a>
+            <button class="btn btn-outline-secondary" onclick="exportSettings()">
+                <i class="fas fa-download me-2"></i>Export
+            </button>
+        </div>
+    </div>
+
+    <!-- System Overview -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-python text-primary fa-2x mb-2"></i>
+                    <h6 class="card-title">Python</h6>
+                    <p class="card-text">{{ python_version }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-spider text-success fa-2x mb-2"></i>
+                    <h6 class="card-title">ScrapydWeb</h6>
+                    <p class="card-text">{{ scrapydash_version }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-cogs text-info fa-2x mb-2"></i>
+                    <h6 class="card-title">Scrapy</h6>
+                    <p class="card-text">{{ scrapy_version }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-server text-warning fa-2x mb-2"></i>
+                    <h6 class="card-title">Scrapyd</h6>
+                    <p class="card-text">{{ scrapyd_version }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Information -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-microchip me-2"></i>Process Information
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-primary me-2">MAIN</span>
+                        <strong>PID:</strong> {{ MAIN_PID }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-success me-2">PARSER</span>
+                        <strong>PID:</strong> {{ LOGPARSER_PID }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-info me-2">POLL</span>
+                        <strong>PID:</strong> {{ POLL_PID }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuration Files -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-file-code me-2"></i>Configuration Files
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6><i class="fas fa-file text-primary me-2"></i>Default Settings</h6>
+                    <p class="small text-muted mb-1">{{ DEFAULT_SETTINGS_PY_PATH }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h6><i class="fas fa-file-edit text-success me-2"></i>User Settings</h6>
+                    <p class="small text-muted mb-1">{{ SCRAPYDASH_SETTINGS_PY_PATH }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Sections -->
+    <div class="accordion" id="settingsAccordion">
+        <!-- ScrapydWeb Server Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="scrapydashHeading">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#scrapydashCollapse">
+                    <i class="fas fa-spider text-primary me-2"></i>
+                    ScrapydWeb Server
+                </button>
+            </h2>
+            <div id="scrapydashCollapse" class="accordion-collapse collapse show" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Server Configuration</label>
+                                <pre class="bg-light p-3 rounded small">{{ scrapydash_server }}</pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">HTTPS Settings</label>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-{{ 'success' if ENABLE_HTTPS else 'secondary' }} me-2">
+                                        {{ 'ENABLED' if ENABLE_HTTPS else 'DISABLED' }}
+                                    </span>
+                                    ENABLE_HTTPS = {{ ENABLE_HTTPS }}
+                                </div>
+                                <pre class="bg-light p-3 rounded small">{{ enable_https_details }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrapy Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="scrapyHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scrapyCollapse">
+                    <i class="fas fa-cogs text-success me-2"></i>
+                    Scrapy Configuration
+                </button>
+            </h2>
+            <div id="scrapyCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Projects Directory</label>
+                        <pre class="bg-light p-3 rounded small">{{ SCRAPY_PROJECTS_DIR }}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrapyd Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="scrapydHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scrapydCollapse">
+                    <i class="fas fa-server text-info me-2"></i>
+                    Scrapyd Configuration
+                </button>
+            </h2>
+            <div id="scrapydCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Servers</label>
+                                <pre class="bg-light p-3 rounded small">{{ servers }}</pre>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Local Server</label>
+                                <pre class="bg-light p-3 rounded small">{{ LOCAL_SCRAPYD_SERVER }}</pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Settings</label>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-{{ 'success' if CHECK_SCRAPYD_SERVERS else 'secondary' }} me-2">
+                                        {{ 'ENABLED' if CHECK_SCRAPYD_SERVERS else 'DISABLED' }}
+                                    </span>
+                                    CHECK_SCRAPYD_SERVERS = {{ CHECK_SCRAPYD_SERVERS }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Logs Directory</label>
+                                <pre class="bg-light p-3 rounded small">{{ LOCAL_SCRAPYD_LOGS_DIR }}</pre>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Log Extensions</label>
+                                <pre class="bg-light p-3 rounded small">{{ SCRAPYD_LOG_EXTENSIONS }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LogParser Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="logparserHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#logparserCollapse">
+                    <i class="fas fa-file-alt text-warning me-2"></i>
+                    LogParser Configuration
+                </button>
+            </h2>
+            <div id="logparserCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Status</label>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-{{ 'success' if ENABLE_LOGPARSER else 'secondary' }} me-2">
+                                        {{ 'ENABLED' if ENABLE_LOGPARSER else 'DISABLED' }}
+                                    </span>
+                                    ENABLE_LOGPARSER = {{ ENABLE_LOGPARSER }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Version</label>
+                                <p class="text-muted">{{ logparser_version }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Settings File</label>
+                                <p class="small text-muted">{{ logparser_settings_py_path }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Backup Stats</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-{{ 'success' if BACKUP_STATS_JSON_FILE else 'secondary' }} me-2">
+                                        {{ 'ENABLED' if BACKUP_STATS_JSON_FILE else 'DISABLED' }}
+                                    </span>
+                                    BACKUP_STATS_JSON_FILE = {{ BACKUP_STATS_JSON_FILE }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timer Tasks -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="timerHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#timerCollapse">
+                    <i class="fas fa-clock text-primary me-2"></i>
+                    Timer Tasks
+                </button>
+            </h2>
+            <div id="timerCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Scheduler State</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-{{ 'success' if scheduler_state == 'running' else 'warning' }} me-2">
+                                        {{ scheduler_state.upper() }}
+                                    </span>
+                                    {{ scheduler_state }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Intervals</label>
+                                <ul class="list-unstyled small">
+                                    <li><strong>Jobs Snapshot:</strong> {{ JOBS_SNAPSHOT_INTERVAL }}s</li>
+                                    <li><strong>Task Result Check:</strong> {{ CHECK_TASK_RESULT_INTERVAL }}s</li>
+                                    <li><strong>Result Limit:</strong> {{ KEEP_TASK_RESULT_LIMIT }}</li>
+                                    <li><strong>Keep Within Days:</strong> {{ KEEP_TASK_RESULT_WITHIN_DAYS }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Run Spider Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="runspiderHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#runspiderCollapse">
+                    <i class="fas fa-play text-success me-2"></i>
+                    Run Spider Settings
+                </button>
+            </h2>
+            <div id="runspiderCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <pre class="bg-light p-3 rounded small">{{ run_spider_details }}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Display Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="displayHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#displayCollapse">
+                    <i class="fas fa-desktop text-info me-2"></i>
+                    Page Display Settings
+                </button>
+            </h2>
+            <div id="displayCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <pre class="bg-light p-3 rounded small">{{ page_display_details }}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Communication Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="communicationHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#communicationCollapse">
+                    <i class="fas fa-comments text-warning me-2"></i>
+                    Communication Settings
+                </button>
+            </h2>
+            <div id="communicationCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold"><i class="fab fa-slack me-2"></i>Slack</label>
+                                <pre class="bg-light p-3 rounded small">{{ slack_details }}</pre>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold"><i class="fab fa-telegram me-2"></i>Telegram</label>
+                                <pre class="bg-light p-3 rounded small">{{ telegram_details }}</pre>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-envelope me-2"></i>Email</label>
+                                <pre class="bg-light p-3 rounded small">{{ email_details }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Email Sender & Recipients</label>
+                                <pre class="bg-light p-3 rounded small">{{ email_sender_recipients }}</pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">SMTP Settings</label>
+                                <pre class="bg-light p-3 rounded small">{{ email_smtp_settings }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monitor & Alert Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="monitorHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#monitorCollapse">
+                    <i class="fas fa-bell text-danger me-2"></i>
+                    Monitor & Alert Settings
+                </button>
+            </h2>
+            <div id="monitorCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Monitor Status</label>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-{{ 'success' if ENABLE_MONITOR else 'secondary' }} me-2">
+                                        {{ 'ENABLED' if ENABLE_MONITOR else 'DISABLED' }}
+                                    </span>
+                                    ENABLE_MONITOR = {{ ENABLE_MONITOR }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Poll Interval</label>
+                                <pre class="bg-light p-3 rounded small">{{ poll_interval }}</pre>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Alert Switcher</label>
+                                <pre class="bg-light p-3 rounded small">{{ alert_switcher }}</pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Alert Working Time</label>
+                                <pre class="bg-light p-3 rounded small">{{ alert_working_time }}</pre>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Alert Triggers</label>
+                                <pre class="bg-light p-3 rounded small">{{ alert_triggers|safe }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Settings -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="systemHeading">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#systemCollapse">
+                    <i class="fas fa-cog text-secondary me-2"></i>
+                    System Settings
+                </button>
+            </h2>
+            <div id="systemCollapse" class="accordion-collapse collapse" data-bs-parent="#settingsAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Debug Settings</label>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-{{ 'warning' if DEBUG else 'secondary' }} me-2">
+                                        {{ 'ENABLED' if DEBUG else 'DISABLED' }}
+                                    </span>
+                                    DEBUG = {{ DEBUG }}
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-{{ 'info' if VERBOSE else 'secondary' }} me-2">
+                                        {{ 'ENABLED' if VERBOSE else 'DISABLED' }}
+                                    </span>
+                                    VERBOSE = {{ VERBOSE }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Data Path</label>
+                                <pre class="bg-light p-3 rounded small">{{ DATA_PATH }}</pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Database Configuration</label>
+                                <pre class="bg-light p-3 rounded small">{{ database_details }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Settings page functionality
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSettingsPage();
+});
+
+function initializeSettingsPage() {
+    // Add copy functionality to pre elements
+    document.querySelectorAll('pre').forEach(pre => {
+        pre.style.cursor = 'pointer';
+        pre.title = 'Click to copy';
+        pre.addEventListener('click', function() {
+            copyToClipboard(this.textContent);
+        });
+    });
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Show temporary success message
+        const toast = document.createElement('div');
+        toast.className = 'toast align-items-center text-white bg-success border-0 position-fixed';
+        toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check me-2"></i>Copied to clipboard!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+        
+        // Remove toast after it's hidden
+        toast.addEventListener('hidden.bs.toast', () => {
+            document.body.removeChild(toast);
+        });
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+function exportSettings() {
+    // Simulate settings export
+    const settings = {
+        python_version: '{{ python_version }}',
+        scrapydash_version: '{{ scrapydash_version }}',
+        scrapy_version: '{{ scrapy_version }}',
+        scrapyd_version: '{{ scrapyd_version }}',
+        main_pid: '{{ MAIN_PID }}',
+        logparser_pid: '{{ LOGPARSER_PID }}',
+        poll_pid: '{{ POLL_PID }}',
+        enable_https: {{ ENABLE_HTTPS|tojson }},
+        check_scrapyd_servers: {{ CHECK_SCRAPYD_SERVERS|tojson }},
+        enable_logparser: {{ ENABLE_LOGPARSER|tojson }},
+        enable_monitor: {{ ENABLE_MONITOR|tojson }},
+        debug: {{ DEBUG|tojson }},
+        verbose: {{ VERBOSE|tojson }}
+    };
+    
+    const dataStr = JSON.stringify(settings, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = 'scrapydash_settings.json';
+    link.click();
+}
+
+// Add hover effects to accordion buttons
+document.querySelectorAll('.accordion-button').forEach(button => {
+    button.addEventListener('mouseenter', function() {
+        this.style.backgroundColor = 'var(--bs-light)';
+    });
+    
+    button.addEventListener('mouseleave', function() {
+        if (!this.classList.contains('collapsed')) {
+            this.style.backgroundColor = '';
+        } else {
+            this.style.backgroundColor = '';
+        }
+    });
+});
+</script>
+{% endblock %}

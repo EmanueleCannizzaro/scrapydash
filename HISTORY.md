@@ -4,7 +4,7 @@ Release History
 ------------------
 - Support Python 3.13 and Scrapyd v1.5.0
 - Support deleting timer task results automatically
-- Update config file to scrapydweb_settings_v11.py
+- Update config file to scrapydash_settings_v11.py
 
 
 1.5.0 (2024-02-11)
@@ -25,54 +25,54 @@ Release History
 - Improvements
   - UI improvements on sidebar and multinode buttons
 - Others
-  - Update config file to scrapydweb_settings_v10.py
+  - Update config file to scrapydash_settings_v10.py
 
 
-[1.3.0](https://github.com/my8100/scrapydweb/issues?q=is%3Aclosed+milestone%3A1.3.0) (2019-08-04)
+[1.3.0](https://github.com/EmanueleCannizzaro0/scrapydash/issues?q=is%3Aclosed+milestone%3A1.3.0) (2019-08-04)
 ------------------
 - New Features
-  - Add new pages Node Reports and Cluster Reports for aggregating jobs stats [(issue #72)](https://github.com/my8100/scrapydweb/issues/72)
+  - Add new pages Node Reports and Cluster Reports for aggregating jobs stats [(issue #72)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/72)
 - Improvements
-  - Adapt to [:link: *LogParser*](https://github.com/my8100/logparser) v0.8.2
-  - Add DATA_PATH option for customizing path to save program data [(issue #40)](https://github.com/my8100/scrapydweb/issues/40)
-  - Add DATABASE_URL option to support MySQL or PostgreSQL backend [(issue #42)](https://github.com/my8100/scrapydweb/issues/42)
-  - Support specify the latest version of Scrapy project in the Run Spider page [(issue #4)](https://github.com/my8100/scrapydweb/issues/4#issuecomment-475145676)
-  - Support specify default values of settings & arguments in the Run Spider page [(issue #55)](https://github.com/my8100/scrapydweb/issues/55)
+  - Adapt to [:link: *LogParser*](https://github.com/EmanueleCannizzaro0/logparser) v0.8.2
+  - Add DATA_PATH option for customizing path to save program data [(issue #40)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/40)
+  - Add DATABASE_URL option to support MySQL or PostgreSQL backend [(issue #42)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/42)
+  - Support specify the latest version of Scrapy project in the Run Spider page [(issue #4)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/4#issuecomment-475145676)
+  - Support specify default values of settings & arguments in the Run Spider page [(issue #55)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/55)
 - Others
-  - Update config file to scrapydweb_settings_v9.py
+  - Update config file to scrapydash_settings_v9.py
   - Support continuous integration (CI) on [CircleCI](https://circleci.com/)
 
 
 1.2.0 (2019-03-12)
 ------------------
 - New Features
-  - Support :alarm_clock: **Timer Tasks** to schedule a spider run periodically [(issue #4)](https://github.com/my8100/scrapydweb/issues/4)
-  - Persist jobs information in database [(issue #21)](https://github.com/my8100/scrapydweb/issues/21)
+  - Support :alarm_clock: **Timer Tasks** to schedule a spider run periodically [(issue #4)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/4)
+  - Persist jobs information in database [(issue #21)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/21)
 - Improvements
-  - Adapt to [:link: *LogParser*](https://github.com/my8100/logparser) v0.8.1, show Crawler.stats and Crawler.engine
+  - Adapt to [:link: *LogParser*](https://github.com/EmanueleCannizzaro0/logparser) v0.8.1, show Crawler.stats and Crawler.engine
     in the Stats page if available.
   - Support backing up stats json files in case the original logfiles are deleted by Scrapyd
-  - Support setting up EMAIL_USERNAME separately [(issue #28)](https://github.com/my8100/scrapydweb/issues/28)
+  - Support setting up EMAIL_USERNAME separately [(issue #28)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/28)
   - Introduce new UI for the Jobs, Logs, and Items page
   - Add 'Sync from Servers page' checkbox in the Deploy Project and Run Spider page
   - Rename 'Overview' to 'Servers', 'Dashboard' to 'Jobs'
 - Others
-  - Change SCRAPYDWEB_SETTINGS_PY to 'scrapydweb_settings_v8.py'
+  - Change SCRAPYDASH_SETTINGS_PY to 'scrapydash_settings_v8.py'
 
 
 1.1.0 (2019-01-20)
 ------------------
 - New Features
-  - **Integrated with [:link: *LogParser*](https://github.com/my8100/logparser)**
+  - **Integrated with [:link: *LogParser*](https://github.com/EmanueleCannizzaro0/logparser)**
 - Improvements
   - Remove **HTML caching**
   - Add 'List Stats' in the Overview page
   - Show crawled_pages and scraped_items in the Dashboard page
 - Bug Fixes
-  - Integrated with LogParser to avoid MemoryError when parsing large logfiles [(issue #11)](https://github.com/my8100/scrapydweb/issues/11)
-  - Support running ScrapydWeb in HTTPS mode [(issue #18)](https://github.com/my8100/scrapydweb/issues/18)
+  - Integrated with LogParser to avoid MemoryError when parsing large logfiles [(issue #11)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/11)
+  - Support running ScrapydWeb in HTTPS mode [(issue #18)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/18)
 - Others
-  - Change SCRAPYDWEB_SETTINGS_PY to 'scrapydweb_settings_v7.py'
+  - Change SCRAPYDASH_SETTINGS_PY to 'scrapydash_settings_v7.py'
 
 
 1.0.0 (2018-12-27)
@@ -82,12 +82,12 @@ Release History
   - Introduce new UI for the Deploy Project page
   - Add 500.html for 'Internal Server Error'
 - Bug Fixes
-  - Remove inject_variable() in the base view class **to avoid memory leak** [(issue #14)](https://github.com/my8100/scrapydweb/issues/14)
-  - Parse project name from scrapy.cfg instead of setting it to the folder name for auto packaging [(issue #15)](https://github.com/my8100/scrapydweb/issues/15)
+  - Remove inject_variable() in the base view class **to avoid memory leak** [(issue #14)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/14)
+  - Parse project name from scrapy.cfg instead of setting it to the folder name for auto packaging [(issue #15)](https://github.com/EmanueleCannizzaro0/scrapydash/issues/15)
   - Fix the 'CheckAll / UncheckAll' checkbox and the 'Upload file' function in Safari
   - Fix the 'go-top' and 'go-bottom' buttons in Firefox
   - Fix faulty links in dropdown menu in the cached Log and Stats page of mobile UI
-- Change SCRAPYDWEB_SETTINGS_PY to 'scrapydweb_settings_v6.py'
+- Change SCRAPYDASH_SETTINGS_PY to 'scrapydash_settings_v6.py'
 
 
 1.0.0rc2 (2018-12-10)
@@ -103,7 +103,7 @@ Release History
 - Others
   - Add test codes for Scrapyd cluster
   - Remove the url_for method from all HTML templates
-  - Change SCRAPYDWEB_SETTINGS_PY to 'scrapydweb_settings_v5.py'
+  - Change SCRAPYDASH_SETTINGS_PY to 'scrapydash_settings_v5.py'
 
 
 1.0.0rc1 (2018-11-12)
@@ -114,7 +114,7 @@ Release History
   - Add switch for skipping unselected nodes when using navigation buttons
 - Others
   - **Refactor codes**
-  - Change SCRAPYDWEB_SETTINGS_PY to 'scrapydweb_settings_v4.py'
+  - Change SCRAPYDASH_SETTINGS_PY to 'scrapydash_settings_v4.py'
 
 
 0.9.9 (2018-10-24)
@@ -126,7 +126,7 @@ Release History
 - Bug Fixes
   - Fix the bug that **fails to start up on macOS** because of setting preexec_fn for caching subprocess in v0.9.8
 - Others
-  - Change SCRAPYDWEB_SETTINGS_PY to 'scrapydweb_settings_v3.py'
+  - Change SCRAPYDASH_SETTINGS_PY to 'scrapydash_settings_v3.py'
 
 
 0.9.8 (2018-10-19)
@@ -149,7 +149,7 @@ Release History
   - Update caching mechanism: finished job would be cached only once
   - Remove .log.gz and .gz extension in the 'Log Parser' page
 - Others
-  - Change SCRAPYDWEB_SETTINGS_PY to 'scrapydweb_settings_v2.py'
+  - Change SCRAPYDASH_SETTINGS_PY to 'scrapydash_settings_v2.py'
 
 
 0.9.5 (2018-10-12)

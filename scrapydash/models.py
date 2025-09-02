@@ -17,7 +17,7 @@ class LegacySQLAlchemy:
     def __init__(self, session_options=None):
         self.session_options = session_options or {}
         self.Base = declarative_base()
-        self.engine = create_engine('sqlite:///scrapydweb.db')  # Replace with your database URL
+        self.engine = create_engine('sqlite:///scrapydash.db')  # Replace with your database URL
         self.Base.metadata.bind = self.engine
         self.Session = sessionmaker(bind=self.engine, **self.session_options)
         self.session = self.Session()
@@ -86,7 +86,7 @@ class Metadata(db.Base):
     logparser_pid = Column(Integer, unique=False, nullable=True)
     poll_pid = Column(Integer, unique=False, nullable=True)
     pageview = Column(Integer, unique=False, nullable=False, default=0)
-    url_scrapydweb = Column(Text(), unique=False, nullable=False, default='http://127.0.0.1:5000')
+    url_scrapydash = Column(Text(), unique=False, nullable=False, default='http://127.0.0.1:5000')
     url_jobs = Column(String(255), unique=False, nullable=False, default='/1/jobs/')
     url_schedule_task = Column(String(255), unique=False, nullable=False, default='/1/schedule/task/')
     url_delete_task_result = Column(String(255), unique=False, nullable=False, default='/1/tasks/xhr/delete/1/1/')
@@ -137,7 +137,7 @@ def create_jobs_table(server):
 
     return Job
     # sqlalchemy/ext/declarative/clsregistry.py:128: SAWarning: This declarative base already contains a class
-    # with the same class name and module name as scrapydweb.models.Job,
+    # with the same class name and module name as scrapydash.models.Job,
     # and will be replaced in the string-lookup table.
     # https://stackoverflow.com/questions/27773489/dynamically-create-a-python-subclass-in-a-function
     # return type('Job_%s' % server, (Job, ), dict(__tablename__=server,  __bind_key__='jobs'))

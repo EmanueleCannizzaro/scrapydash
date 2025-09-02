@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from scrapydweb import create_app
+from scrapydash import create_app
 from tests.utils import cst, setup_env
 
 
@@ -52,7 +52,7 @@ setup_env(custom_settings)
 
 @pytest.fixture
 def app():
-    fake_server = 'scrapydweb-fake-domain.com:443'
+    fake_server = 'scrapydash-fake-domain.com:443'
     SCRAPYD_SERVERS = [custom_settings['_SCRAPYD_SERVER'], fake_server]
     if custom_settings['_SCRAPYD_SERVER_AUTH']:
         username, password = custom_settings['_SCRAPYD_SERVER_AUTH']
@@ -66,7 +66,7 @@ def app():
         # SERVER_NAME='127.0.0.1:5000',  # http://flask.pocoo.org/docs/0.12/config/#builtin-configuration-values
 
         DEFAULT_SETTINGS_PY_PATH='',
-        SCRAPYDWEB_SETTINGS_PY_PATH='',
+        SCRAPYDASH_SETTINGS_PY_PATH='',
         MAIN_PID=os.getpid(),
         LOGPARSER_PID=0,
         POLL_PID=0,

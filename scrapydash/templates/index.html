@@ -1,0 +1,390 @@
+{% extends "base_modern.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    .metric-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+        font-size: 0.875rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .quick-action-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+        border: 1px solid #e2e8f0;
+    }
+
+    .quick-action-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-color);
+    }
+
+    .quick-action-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .system-info-card {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .info-item {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: between;
+        align-items: center;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 500;
+        color: var(--secondary-color);
+        flex: 1;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+
+    .uptime-counter {
+        font-family: 'Courier New', monospace;
+        font-size: 1.1rem;
+        color: var(--success-color);
+    }
+
+    .server-status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .server-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 1.25rem;
+        box-shadow: var(--shadow);
+        border-left: 4px solid var(--success-color);
+    }
+
+    .server-card.offline {
+        border-left-color: var(--danger-color);
+    }
+
+    .server-name {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .server-url {
+        font-size: 0.875rem;
+        color: var(--secondary-color);
+        margin-bottom: 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+        .metric-value {
+            font-size: 2rem;
+        }
+        
+        .quick-action-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.25rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="text-gradient mb-0">Dashboard</h1>
+        <p class="text-muted">Welcome to ScrapydWeb - Monitor and manage your Scrapy spiders</p>
+    </div>
+</div>
+
+<!-- Metrics Row -->
+<div class="row mb-4">
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="metric-card">
+            <div class="metric-value">{{ SCRAPYD_SERVERS_AMOUNT }}</div>
+            <div class="metric-label">Active Servers</div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="metric-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="metric-value" id="running-jobs">0</div>
+            <div class="metric-label">Running Jobs</div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="metric-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="metric-value" id="pending-jobs">0</div>
+            <div class="metric-label">Pending Jobs</div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="metric-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="metric-value" id="finished-jobs">0</div>
+            <div class="metric-label">Completed Today</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h3 class="mb-3">Quick Actions</h3>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-3">
+        <a href="/1/schedule/" class="text-decoration-none">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h6 class="mb-0">Schedule Spider</h6>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-3">
+        <a href="/1/deploy/" class="text-decoration-none">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-upload"></i>
+                </div>
+                <h6 class="mb-0">Deploy Project</h6>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-3">
+        <a href="/1/jobs/" class="text-decoration-none">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h6 class="mb-0">View Jobs</h6>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-3">
+        <a href="/1/servers/" class="text-decoration-none">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h6 class="mb-0">Manage Servers</h6>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-3">
+        <a href="/1/logs/" class="text-decoration-none">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h6 class="mb-0">View Logs</h6>
+            </div>
+        </a>
+    </div>
+    <div class="col-lg-2 col-md-4 col-6 mb-3">
+        <a href="/1/settings/" class="text-decoration-none">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h6 class="mb-0">Settings</h6>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Main Content Row -->
+<div class="row">
+    <!-- Server Status -->
+    <div class="col-lg-8 mb-4">
+        <div class="card-modern">
+            <div class="card-header-modern">
+                <h5 class="mb-0">
+                    <i class="fas fa-server me-2"></i>Server Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="server-status-grid">
+                    {% for server in SCRAPYD_SERVERS %}
+                    <div class="server-card">
+                        <div class="server-name">
+                            [{{ loop.index }}] Server {{ loop.index }}
+                        </div>
+                        <div class="server-url">{{ server }}</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="status-badge status-online">
+                                <i class="fas fa-circle me-1"></i>Online
+                            </span>
+                            <small class="text-muted">Last check: just now</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information -->
+    <div class="col-lg-4 mb-4">
+        <div class="system-info-card">
+            <div class="card-header-modern">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>System Information
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="info-item">
+                    <span class="info-label">Version</span>
+                    <span class="info-value">{{ SCRAPYDASH_VERSION }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Uptime</span>
+                    <span class="info-value uptime-counter" id="uptime">00:00:00</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Authentication</span>
+                    <span class="info-value">
+                        {% if ENABLE_AUTH %}
+                        <span class="status-badge status-warning">Enabled</span>
+                        {% else %}
+                        <span class="status-badge status-offline">Disabled</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Database</span>
+                    <span class="info-value">SQLite</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Scheduler</span>
+                    <span class="info-value">
+                        <span class="status-badge status-online">Running</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-12">
+        <div class="card-modern">
+            <div class="card-header-modern">
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center py-4">
+                    <i class="fas fa-clock text-muted" style="font-size: 3rem; opacity: 0.3;"></i>
+                    <p class="text-muted mt-3">No recent activity to display</p>
+                    <small class="text-muted">Job activity will appear here once spiders are scheduled</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Uptime counter
+    let startTime = Date.now();
+    
+    function updateUptime() {
+        const now = Date.now();
+        const uptime = now - startTime;
+        
+        const hours = Math.floor(uptime / (1000 * 60 * 60));
+        const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((uptime % (1000 * 60)) / 1000);
+        
+        const uptimeString = 
+            String(hours).padStart(2, '0') + ':' +
+            String(minutes).padStart(2, '0') + ':' +
+            String(seconds).padStart(2, '0');
+        
+        document.getElementById('uptime').textContent = uptimeString;
+    }
+    
+    // Update uptime every second
+    setInterval(updateUptime, 1000);
+    updateUptime(); // Initial call
+    
+    // Simulate job metrics (replace with real API calls)
+    function updateMetrics() {
+        // These would be real API calls in production
+        document.getElementById('running-jobs').textContent = Math.floor(Math.random() * 5);
+        document.getElementById('pending-jobs').textContent = Math.floor(Math.random() * 10);
+        document.getElementById('finished-jobs').textContent = Math.floor(Math.random() * 50);
+    }
+    
+    // Update metrics every 30 seconds
+    setInterval(updateMetrics, 30000);
+    updateMetrics(); // Initial call
+    
+    // Add loading states for quick actions
+    document.querySelectorAll('.quick-action-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const icon = this.querySelector('.quick-action-icon i');
+            icon.className = 'fas fa-spinner fa-spin';
+            
+            // Reset icon after navigation (in case user goes back)
+            setTimeout(() => {
+                icon.className = icon.dataset.originalClass || 'fas fa-rocket';
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

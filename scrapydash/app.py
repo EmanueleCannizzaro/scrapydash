@@ -17,8 +17,8 @@ from .routers import api, system
 from .auth import get_current_user_optional
 from .scheduler import scheduler_manager
 from .__version__ import __description__, __version__
-from .common import find_scrapydweb_settings_py, handle_metadata
-from .vars import ROOT_DIR, SCRAPYDWEB_SETTINGS_PY
+from .common import find_scrapydash_settings_py, handle_metadata
+from .vars import ROOT_DIR, SCRAPYDASH_SETTINGS_PY
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ def create_app(test_config=None):
     )
     
     # Setup templates
-    template_path = os.path.join(os.path.dirname(__file__), "templates")
+    template_path = "scrapydash/templates" # os.path.join(os.path.dirname(__file__), "templates")
     templates = Jinja2Templates(directory=template_path)
     
     # Flask 'g' compatibility class
@@ -104,15 +104,15 @@ def create_app(test_config=None):
     templates.env.globals['url_for'] = url_for
     
     # Setup static files
-    static_path = os.path.join(os.path.dirname(__file__), "static")
+    static_path = "scrapydash/static" # os.path.join(os.path.dirname(__file__), "static")
     if os.path.exists(static_path):
         app.mount("/static", StaticFiles(directory=static_path), name="static")
     
     # Setup app state for system router compatibility
     app.state.templates = templates
     app.state.config = {
-        'SCRAPYDWEB_BIND': '0.0.0.0',
-        'SCRAPYDWEB_PORT': 5000,
+        'SCRAPYDASH_BIND': '0.0.0.0',
+        'SCRAPYDASH_PORT': 5000,
         'ENABLE_AUTH': False,
         'USERNAME': '',
         'PASSWORD': '',
@@ -133,16 +133,16 @@ def create_app(test_config=None):
         'DEBUG': False,
         'VERBOSE': False,
         'DATA_PATH': '',
-        'DATABASE_URL': 'sqlite:///scrapydweb.db',
+        'DATABASE_URL': 'sqlite:///dtabases/scrapydash.db',
     }
     
     def get_template_context():
         """Template context factory for system router"""
         return {
-            "GITHUB_URL": "https://github.com/my8100/scrapydweb",
-            "SCRAPYDWEB_VERSION": __version__,
+            "GITHUB_URL": "https://github.com/EmanueleCannizzaro/scrapydash",
+            "SCRAPYDASH_VERSION": __version__,
             "python_version": "3.8+",
-            "scrapydweb_version": __version__,
+            "scrapydash_version": __version__,
             "scrapy_version": "2.5+",
             "scrapyd_version": "1.2+",
         }
@@ -201,19 +201,19 @@ def create_app(test_config=None):
         
         # Global template variables
         global_context = {
-            "GITHUB_URL": "https://github.com/my8100/scrapydweb",
+            "GITHUB_URL": "https://github.com/EmanueleCannizzaro0/scrapydash",
             "SCRAPYD_SERVERS_GROUPS": ["Group 1"],
             "SCRAPYD_SERVERS_AMOUNT": 1,
             "SCRAPYD_SERVERS": ["127.0.0.1:6800"],
             "SCRAPYD_SERVERS_PUBLIC_URLS": [""],
             "SHOW_SCRAPYD_ITEMS": True,
             "ENABLE_AUTH": False,
-            "SCRAPYDWEB_VERSION": __version__,
+            "SCRAPYDASH_VERSION": __version__,
             "DAEMONSTATUS_REFRESH_INTERVAL": 10,
             "node": 1,
         }
         
-        return templates.TemplateResponse("scrapydweb/index.html", {
+        return templates.TemplateResponse("index.html", {
             "request": request,
             "version": __version__,
             "user": user,
@@ -236,17 +236,17 @@ def create_app(test_config=None):
         )
         
         global_context = {
-            "GITHUB_URL": "https://github.com/my8100/scrapydweb",
+            "GITHUB_URL": "https://github.com/EmanueleCannizzaro0/scrapydash",
             "SCRAPYD_SERVERS_GROUPS": ["Group 1"],
             "SCRAPYD_SERVERS_AMOUNT": 3,
             "SCRAPYD_SERVERS": ["127.0.0.1:6800", "127.0.0.1:6801", "127.0.0.1:6802"],
             "SCRAPYD_SERVERS_PUBLIC_URLS": ["", "", ""],
             "ENABLE_AUTH": False,
-            "SCRAPYDWEB_VERSION": __version__,
+            "SCRAPYDASH_VERSION": __version__,
             "node": 1,
         }
         
-        return templates.TemplateResponse("scrapydweb/servers.html", {
+        return templates.TemplateResponse("servers.html", {
             "request": request,
             "user": user,
             "g": g_context,
@@ -267,16 +267,16 @@ def create_app(test_config=None):
         )
         
         global_context = {
-            "GITHUB_URL": "https://github.com/my8100/scrapydweb",
+            "GITHUB_URL": "https://github.com/EmanueleCannizzaro0/scrapydash",
             "SCRAPYD_SERVERS_GROUPS": ["Group 1"],
             "SCRAPYD_SERVERS_AMOUNT": 3,
             "SCRAPYD_SERVERS": ["127.0.0.1:6800", "127.0.0.1:6801", "127.0.0.1:6802"],
             "ENABLE_AUTH": False,
-            "SCRAPYDWEB_VERSION": __version__,
+            "SCRAPYDASH_VERSION": __version__,
             "node": 1,
         }
         
-        return templates.TemplateResponse("scrapydweb/jobs.html", {
+        return templates.TemplateResponse("jobs.html", {
             "request": request,
             "user": user,
             "g": g_context,
@@ -297,18 +297,18 @@ def create_app(test_config=None):
         )
         
         global_context = {
-            "GITHUB_URL": "https://github.com/my8100/scrapydweb",
+            "GITHUB_URL": "https://github.com/EmanueleCannizzaro0/scrapydash",
             "SCRAPYD_SERVERS_GROUPS": ["Group 1"],
             "SCRAPYD_SERVERS_AMOUNT": 3,
             "SCRAPYD_SERVERS": ["127.0.0.1:6800", "127.0.0.1:6801", "127.0.0.1:6802"],
             "ENABLE_AUTH": False,
-            "SCRAPYDWEB_VERSION": __version__,
+            "SCRAPYDASH_VERSION": __version__,
             "node": 1,
             "projects": ["project1", "project2", "project3"],
             "spiders": {"project1": ["spider1", "spider2"], "project2": ["spider3"], "project3": ["spider4", "spider5"]},
         }
         
-        return templates.TemplateResponse("scrapydweb/schedule.html", {
+        return templates.TemplateResponse("schedule.html", {
             "request": request,
             "user": user,
             "g": g_context,
@@ -329,12 +329,12 @@ def create_app(test_config=None):
         )
         
         global_context = {
-            "GITHUB_URL": "https://github.com/my8100/scrapydweb",
+            "GITHUB_URL": "https://github.com/EmanueleCannizzaro0/scrapydash",
             "SCRAPYD_SERVERS_GROUPS": ["Group 1"],
             "SCRAPYD_SERVERS_AMOUNT": 3,
             "SCRAPYD_SERVERS": ["127.0.0.1:6800", "127.0.0.1:6801", "127.0.0.1:6802"],
             "ENABLE_AUTH": False,
-            "SCRAPYDWEB_VERSION": __version__,
+            "SCRAPYDASH_VERSION": __version__,
             "node": 1,
             "SCRAPY_PROJECTS_DIR": "/path/to/projects",
             "folders": ["project1", "project2", "project3"],
@@ -347,7 +347,7 @@ def create_app(test_config=None):
             "selected_nodes": [],
         }
         
-        return templates.TemplateResponse("scrapydweb/deploy.html", {
+        return templates.TemplateResponse("deploy.html", {
             "request": request,
             "user": user,
             "g": g_context,
@@ -368,16 +368,16 @@ def create_app(test_config=None):
         )
         
         global_context = {
-            "GITHUB_URL": "https://github.com/my8100/scrapydweb",
+            "GITHUB_URL": "https://github.com/EmanueleCannizzaro0/scrapydash",
             "SCRAPYD_SERVERS_GROUPS": ["Group 1"],
             "SCRAPYD_SERVERS_AMOUNT": 3,
             "SCRAPYD_SERVERS": ["127.0.0.1:6800", "127.0.0.1:6801", "127.0.0.1:6802"],
             "ENABLE_AUTH": False,
-            "SCRAPYDWEB_VERSION": __version__,
+            "SCRAPYDASH_VERSION": __version__,
             "node": 1,
         }
         
-        return templates.TemplateResponse("scrapydweb/logs.html", {
+        return templates.TemplateResponse("logs.html", {
             "request": request,
             "user": user,
             "g": g_context,

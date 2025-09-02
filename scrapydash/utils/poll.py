@@ -17,14 +17,14 @@ import requests
 from requests.adapters import HTTPAdapter
 
 
-logger = logging.getLogger('scrapydweb.utils.poll')  # __name__
+logger = logging.getLogger('scrapydash.utils.poll')  # __name__
 _handler = logging.StreamHandler()
 _formatter = logging.Formatter(fmt="[%(asctime)s] %(levelname)-8s in %(name)s: %(message)s")
 _handler.setFormatter(_formatter)
 logger.addHandler(_handler)
 
 IN_WINDOWS = platform.system() == 'Windows'
-# See also scrapydweb/views/dashboard/jobs.py
+# See also scrapydash/views/dashboard/jobs.py
 JOB_PATTERN = re.compile(r"""
                             <tr>\s*
                                 <td>(?P<Project>.*?)</td>\s*
@@ -45,11 +45,11 @@ JOB_KEYS = ['project', 'spider', 'job', 'pid', 'start', 'runtime', 'finish', 'lo
 class Poll(object):
     logger = logger
 
-    def __init__(self, url_scrapydweb, username, password,
+    def __init__(self, url_scrapydash, username, password,
                  scrapyd_servers, scrapyd_servers_auths,
                  poll_round_interval, poll_request_interval,
                  main_pid, verbose, exit_timeout=0):
-        self.url_scrapydweb = url_scrapydweb
+        self.url_scrapydash = url_scrapydash
         self.auth = (username, password) if username and password else None
 
         self.scrapyd_servers = scrapyd_servers
@@ -78,7 +78,7 @@ class Poll(object):
         self.exit_timeout = exit_timeout
 
         self.init_time = time.time()
-        self.url_stats = self.url_scrapydweb + '/{node}/log/{opt}/{project}/{spider}/{job}/?job_finished={job_finished}'
+        self.url_stats = self.url_scrapydash + '/{node}/log/{opt}/{project}/{spider}/{job}/?job_finished={job_finished}'
 
     def check_exit(self):
         exit_condition_1 = pid_exists is not None and not pid_exists(self.main_pid)
@@ -182,7 +182,7 @@ class Poll(object):
     def run(self):
         for node, (scrapyd_server, auth) in enumerate(zip(self.scrapyd_servers, self.scrapyd_servers_auths), 1):
             # Update Jobs history
-            # url_jobs = self.url_scrapydweb + '/%s/jobs/' % node
+            # url_jobs = self.url_scrapydash + '/%s/jobs/' % node
             # self.make_request(url_jobs, auth=self.auth, post=True)
 
             url_jobs = 'http://%s/jobs' % scrapyd_server
@@ -228,7 +228,7 @@ class Poll(object):
 
 
 def main(args):
-    keys = ('url_scrapydweb', 'username', 'password',
+    keys = ('url_scrapydash', 'username', 'password',
             'scrapyd_servers', 'scrapyd_servers_auths',
             'poll_round_interval', 'poll_request_interval',
             'main_pid', 'verbose', 'exit_timeout')

@@ -46,7 +46,7 @@ def internal_server_error(error):
         url_issues=__url__ + '/issues',
         os=platform.platform(),
         python_version=PYTHON_VERSION,
-        scrapydweb_version=__version__,
+        scrapydash_version=__version__,
         logparser_version=LOGPARSER_VERSION,
         scrapy_version=SCRAPY_VERSION,
         scrapyd_version=SCRAPYD_VERSION,
@@ -64,7 +64,7 @@ def create_app(test_config=None):
         return create_fastapi_app(test_config)
     except ImportError as e:
         print(f"FastAPI components not available: {e}")
-        print("For FastAPI version, use: python -m scrapydweb.run_fastapi")
+        print("For FastAPI version, use: python -m scrapydash.run_fastapi")
         
         # Return a minimal app object to prevent crashes
         class MinimalConfig:
@@ -104,7 +104,7 @@ def create_app(test_config=None):
                 self.config = MinimalConfig()
             
             def run(self, **kwargs):
-                print("Cannot run Flask app. Use 'python -m scrapydweb.run_fastapi' instead.")
+                print("Cannot run Flask app. Use 'python -m scrapydash.run_fastapi' instead.")
         
         return MinimalApp()
 

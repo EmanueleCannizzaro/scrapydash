@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: cimg/python:3.9
     environment:
-      SCRAPYDWEB_TESTMODE: True
+      SCRAPYDASH_TESTMODE: True
     working_directory: ~/repo
     parameters:
       is-py27:
@@ -70,7 +70,7 @@ jobs:
       - run:
           name: Setup env
           command: |
-            mkdir ~/logs
+            mkdir ./logs
             ls -la ~
       - checkout
       - when:
@@ -110,12 +110,12 @@ jobs:
                   # https://discuss.circleci.com/t/multiple-postgres-databases-in-circleci-2-0/23089
                   # createdb: could not connect to database template1: FATAL:  role "circleci" does not exist
                   # sudo apt install -y postgresql-client
-                  # createdb -h localhost scrapydweb_apscheduler -O circleci
+                  # createdb -h localhost scrapydash_apscheduler -O circleci
       - when:
           condition: <<parameters.use-mysql>>
           steps:
             - run:
-                # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydweb_apscheduler"
+                # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydash_apscheduler"
                 name: Waiting for MySQL to be ready
                 command: |
                   for i in `seq 1 10`;
@@ -132,10 +132,10 @@ jobs:
                   # mysql -h 127.0.0.1 -u user -ppassw0rd test_db < sql-data/dummy.sql
                   # mysql -h 127.0.0.1 -u user -ppassw0rd --execute="SELECT * FROM test_db.Persons"
                   # https://discuss.circleci.com/t/how-can-i-create-multiple-mysql-databases-in-the-same-docker-image/24762
-                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydweb_apscheduler"
-                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydweb_timertasks"
-                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydweb_metadata"
-                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydweb_jobs"
+                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydash_apscheduler"
+                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydash_timertasks"
+                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydash_metadata"
+                  # mysql -h 127.0.0.1 -u root -prootpw -e "create database scrapydash_jobs"
       - run:
           name: Install dependencies
           command: |
@@ -158,7 +158,7 @@ jobs:
                   pip list
                   pip install -U git+https://github.com/scrapy/scrapy.git
                   pip install -U git+https://github.com/scrapy/scrapyd.git
-                  pip install -U git+https://github.com/my8100/logparser.git
+                  pip install -U git+https://github.com/EmanueleCannizzaro0/logparser.git
                   pip list
       - when:
           condition: <<parameters.use-scrapyd-v143>>
@@ -190,7 +190,7 @@ jobs:
             flake8 . --count --exclude=./venv* --select=E9,F63,F7,F82 --show-source --statistics
             coverage erase
             # tests/test_schedule.py
-            coverage run --source=scrapydweb -m pytest -s -vv -l --disable-warnings --alluredir=allure-results tests
+            coverage run --source=scrapydash -m pytest -s -vv -l --disable-warnings --alluredir=allure-results tests
       - run:
           name: Generate report
           command: |
@@ -294,7 +294,7 @@ jobs:
           POSTGRES_DB: circleci
           POSTGRES_PASSWORD: passw0rd
     environment:
-      SCRAPYDWEB_TESTMODE: True
+      SCRAPYDASH_TESTMODE: True
       DATABASE_URL: 'postgresql://circleci:fakepassword@localhost:5432'
   py310-git-mysql:
     <<: *test-template
@@ -311,16 +311,16 @@ jobs:
           MYSQL_USER: user
           MYSQL_PASSWORD: passw0rd
     environment:
-      SCRAPYDWEB_TESTMODE: True
+      SCRAPYDASH_TESTMODE: True
       DATABASE_URL: 'mysql://root:rootpw@127.0.0.1:3306'
   py310-sqlite:
     <<: *test-template
     docker:
       - image: cimg/python:3.10
     environment:
-      SCRAPYDWEB_TESTMODE: True
-      DATA_PATH: '/home/circleci/repo/scrapydweb_data'
-      DATABASE_URL: 'sqlite:////home/circleci/repo/scrapydweb_database'
+      SCRAPYDASH_TESTMODE: True
+      DATA_PATH: '/home/circleci/repo/scrapydash_data'
+      DATABASE_URL: 'sqlite:////home/circleci/repo/scrapydash_database'
   py310-postgresql:
     <<: *test-template
     docker:
@@ -333,7 +333,7 @@ jobs:
           POSTGRES_DB: circleci
           POSTGRES_PASSWORD: passw0rd
     environment:
-      SCRAPYDWEB_TESTMODE: True
+      SCRAPYDASH_TESTMODE: True
       DATABASE_URL: 'postgresql://circleci:fakepassword@localhost:5432'
   py310-mysql:
     <<: *test-template
@@ -349,7 +349,7 @@ jobs:
           MYSQL_USER: user
           MYSQL_PASSWORD: passw0rd
     environment:
-      SCRAPYDWEB_TESTMODE: True
+      SCRAPYDASH_TESTMODE: True
       DATABASE_URL: 'mysql://root:rootpw@127.0.0.1:3306'
   py311:
     <<: *test-template

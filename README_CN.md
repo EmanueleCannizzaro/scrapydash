@@ -2,28 +2,28 @@
 
 # ScrapydWeb：用于 Scrapyd 集群管理的 web 应用，支持 Scrapy 日志分析和可视化。
 
-[![PyPI - scrapydweb Version](https://img.shields.io/pypi/v/scrapydweb.svg)](https://pypi.org/project/scrapydweb/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scrapydweb.svg)](https://pypi.org/project/scrapydweb/)
-[![CircleCI](https://circleci.com/gh/my8100/scrapydweb/tree/master.svg?style=shield)](https://circleci.com/gh/my8100/scrapydweb/tree/master)
-[![codecov](https://codecov.io/gh/my8100/scrapydweb/branch/master/graph/badge.svg)](https://codecov.io/gh/my8100/scrapydweb)
-[![Coverage Status](https://coveralls.io/repos/github/my8100/scrapydweb/badge.svg?branch=master)](https://coveralls.io/github/my8100/scrapydweb?branch=master)
-[![Downloads - total](https://static.pepy.tech/badge/scrapydweb)](https://pepy.tech/project/scrapydweb)
-[![GitHub license](https://img.shields.io/github/license/my8100/scrapydweb.svg)](https://github.com/my8100/scrapydweb/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/my8100/scrapydweb.svg?style=social)](https://twitter.com/intent/tweet?text=@my8100_%20ScrapydWeb:%20Web%20app%20for%20Scrapyd%20cluster%20management,%20with%20support%20for%20Scrapy%20log%20analysis%20%26%20visualization.%20%23python%20%23scrapy%20%23scrapyd%20%23webscraping%20%23scrapydweb%20&url=https%3A%2F%2Fgithub.com%2Fmy8100%2Fscrapydweb)
+[![PyPI - scrapydash Version](https://img.shields.io/pypi/v/scrapydash.svg)](https://pypi.org/project/scrapydash/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/scrapydash.svg)](https://pypi.org/project/scrapydash/)
+[![CircleCI](https://circleci.com/gh/EmanueleCannizzaro0/scrapydash/tree/master.svg?style=shield)](https://circleci.com/gh/EmanueleCannizzaro0/scrapydash/tree/master)
+[![codecov](https://codecov.io/gh/EmanueleCannizzaro0/scrapydash/branch/master/graph/badge.svg)](https://codecov.io/gh/EmanueleCannizzaro0/scrapydash)
+[![Coverage Status](https://coveralls.io/repos/github/EmanueleCannizzaro0/scrapydash/badge.svg?branch=master)](https://coveralls.io/github/EmanueleCannizzaro0/scrapydash?branch=master)
+[![Downloads - total](https://static.pepy.tech/badge/scrapydash)](https://pepy.tech/project/scrapydash)
+[![GitHub license](https://img.shields.io/github/license/EmanueleCannizzaro0/scrapydash.svg)](https://github.com/EmanueleCannizzaro0/scrapydash/blob/master/LICENSE)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/EmanueleCannizzaro0/scrapydash.svg?style=social)](https://twitter.com/intent/tweet?text=@EmanueleCannizzaro0_%20ScrapydWeb:%20Web%20app%20for%20Scrapyd%20cluster%20management,%20with%20support%20for%20Scrapy%20log%20analysis%20%26%20visualization.%20%23python%20%23scrapy%20%23scrapyd%20%23webscraping%20%23scrapydash%20&url=https%3A%2F%2Fgithub.com%2FEmanueleCannizzaro0%2Fscrapydash)
 
 
 ##
-![servers](https://raw.githubusercontent.com/my8100/scrapydweb/master/screenshots/servers.png)
+![servers](https://raw.githubusercontent.com/EmanueleCannizzaro0/scrapydash/master/screenshots/servers.png)
 
 ## Scrapyd :x: ScrapydWeb :x: LogParser
 ### :book: 推荐阅读
-[:link: 如何简单高效地部署和监控分布式爬虫项目](https://github.com/my8100/files/blob/master/scrapydweb/README_CN.md)
+[:link: 如何简单高效地部署和监控分布式爬虫项目](https://github.com/EmanueleCannizzaro0/files/blob/master/scrapydash/README_CN.md)
 
-[:link: 如何免费创建云端爬虫集群](https://github.com/my8100/scrapyd-cluster-on-heroku/blob/master/README_CN.md)
+[:link: 如何免费创建云端爬虫集群](https://github.com/EmanueleCannizzaro0/scrapyd-cluster-on-heroku/blob/master/README_CN.md)
 
 
 ## :eyes: 在线体验
-[:link: scrapydweb.herokuapp.com](https://scrapydweb.herokuapp.com)
+[:link: scrapydash.herokuapp.com](https://scrapydash.herokuapp.com)
 
 
 ## :star: 功能特性
@@ -42,7 +42,7 @@
 
 - :battery: 增强功能
   - :package: **自动打包项目**
-  - :male_detective: **集成 [:link: *LogParser*](https://github.com/my8100/logparser)**
+  - :male_detective: **集成 [:link: *LogParser*](https://github.com/EmanueleCannizzaro0/logparser)**
   - :alarm_clock: **定时器任务**
   - :e-mail: **监控和警报**
   - :iphone: 移动端 UI
@@ -64,23 +64,23 @@
 ### :arrow_down: 安装
 - 通过 pip:
 ```bash
-pip install scrapydweb
+pip install scrapydash
 ```
-:heavy_exclamation_mark: 如果 pip 安装结果不是最新版本的 scrapydweb，请先执行`python -m pip install --upgrade pip`，或者前往 https://pypi.org/project/scrapydweb/#files 下载 tar.gz 文件并执行安装命令 `pip install scrapydweb-x.x.x.tar.gz`
+:heavy_exclamation_mark: 如果 pip 安装结果不是最新版本的 scrapydash，请先执行`python -m pip install --upgrade pip`，或者前往 https://pypi.org/project/scrapydash/#files 下载 tar.gz 文件并执行安装命令 `pip install scrapydash-x.x.x.tar.gz`
 
 - 通过 git:
 ```bash
-pip install --upgrade git+https://github.com/my8100/scrapydweb.git
+pip install --upgrade git+https://github.com/EmanueleCannizzaro0/scrapydash.git
 ```
 或:
 ```bash
-git clone https://github.com/my8100/scrapydweb.git
-cd scrapydweb
+git clone https://github.com/EmanueleCannizzaro0/scrapydash.git
+cd scrapydash
 python setup.py install
 ```
 
 ### :arrow_forward: 启动
-1. 通过运行命令 `scrapydweb` 启动 ScrapydWeb（首次启动将自动生成配置文件）。
+1. 通过运行命令 `scrapydash` 启动 ScrapydWeb（首次启动将自动生成配置文件）。
 2. 访问 http://127.0.0.1:5000 **（建议使用 Google Chrome 以获取更好体验）**。
 
 ### :globe_with_meridians: 浏览器支持
@@ -96,30 +96,30 @@ python setup.py install
 <br>
 
 ```bash
-$ git clone https://github.com/my8100/scrapydweb.git
-$ cd scrapydweb
+$ git clone https://github.com/EmanueleCannizzaro0/scrapydash.git
+$ cd scrapydash
 
 # 创建虚拟环境
 $ pip install virtualenv
-$ virtualenv venv/scrapydweb
-# 亦可指定 Python 解释器：$ virtualenv -p /usr/local/bin/python3.7 venv/scrapydweb
-$ source venv/scrapydweb/bin/activate
+$ virtualenv venv/scrapydash
+# 亦可指定 Python 解释器：$ virtualenv -p /usr/local/bin/python3.7 venv/scrapydash
+$ source venv/scrapydash/bin/activate
 
 # 安装依赖库
-(scrapydweb) $ python setup.py install
-(scrapydweb) $ pip install pytest
-(scrapydweb) $ pip install coverage
+(scrapydash) $ python setup.py install
+(scrapydash) $ pip install pytest
+(scrapydash) $ pip install coverage
 
 # 请先确保已经安装和启动 Scrapyd，然后检查和更新 tests/conftest.py 文件中的 custom_settings
-(scrapydweb) $ vi tests/conftest.py
-(scrapydweb) $ curl http://127.0.0.1:6800
+(scrapydash) $ vi tests/conftest.py
+(scrapydash) $ curl http://127.0.0.1:6800
 
 # '-x': 在第一次出现失败时停止测试
-(scrapydweb) $ coverage run --source=scrapydweb -m pytest tests/test_a_factory.py -s -vv -x
-(scrapydweb) $ coverage run --source=scrapydweb -m pytest tests -s -vv --disable-warnings
-(scrapydweb) $ coverage report
+(scrapydash) $ coverage run --source=scrapydash -m pytest tests/test_a_factory.py -s -vv -x
+(scrapydash) $ coverage run --source=scrapydash -m pytest tests -s -vv --disable-warnings
+(scrapydash) $ coverage report
 # 生成 HTML 报告, 文件位于 htmlcov/index.html
-(scrapydweb) $ coverage html
+(scrapydash) $ coverage html
 ```
 
 </details>
@@ -145,7 +145,7 @@ $ source venv/scrapydweb/bin/activate
 
 
 ## :man_technologist: 作者
-| [<img src="https://github.com/my8100.png" width="100px;"/>](https://github.com/my8100)<br/> [<sub>my8100</sub>](https://github.com/my8100) |
+| [<img src="https://github.com/EmanueleCannizzaro0.png" width="100px;"/>](https://github.com/EmanueleCannizzaro0)<br/> [<sub>EmanueleCannizzaro0</sub>](https://github.com/EmanueleCannizzaro0) |
 | --- |
 
 

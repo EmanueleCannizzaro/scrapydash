@@ -26,10 +26,10 @@ try:
 except ImportError:
     SCRAPYD_VERSION = '0.0.0'
 
-SCRAPYDWEB_SETTINGS_PY = 'scrapydweb_settings_v11.py'
+SCRAPYDASH_SETTINGS_PY = 'scrapydash_settings_v11.py'
 sys.path.append(os.getcwd())
 try:
-    custom_settings_module = importlib.import_module(os.path.splitext(SCRAPYDWEB_SETTINGS_PY)[0])
+    custom_settings_module = importlib.import_module(os.path.splitext(SCRAPYDASH_SETTINGS_PY)[0])
 except ImportError:
     custom_data_path = ''
     custom_database_url = ''

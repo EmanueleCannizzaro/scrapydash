@@ -63,14 +63,14 @@ def check_app_config(config):
     logger.debug("Checking app config")
 
     # ScrapydWeb
-    check_assert('SCRAPYDWEB_BIND', '0.0.0.0', str, non_empty=True)
-    SCRAPYDWEB_PORT = config.setdefault('SCRAPYDWEB_PORT', 5000)
+    check_assert('SCRAPYDASH_BIND', '0.0.0.0', str, non_empty=True)
+    SCRAPYDASH_PORT = config.setdefault('SCRAPYDASH_PORT', 5000)
     try:
-        assert not isinstance(SCRAPYDWEB_PORT, bool)
-        SCRAPYDWEB_PORT = int(SCRAPYDWEB_PORT)
-        assert SCRAPYDWEB_PORT > 0
+        assert not isinstance(SCRAPYDASH_PORT, bool)
+        SCRAPYDASH_PORT = int(SCRAPYDASH_PORT)
+        assert SCRAPYDASH_PORT > 0
     except (TypeError, ValueError, AssertionError):
-        assert False, "SCRAPYDWEB_PORT should be a positive integer. Current value: %s" % SCRAPYDWEB_PORT
+        assert False, "SCRAPYDASH_PORT should be a positive integer. Current value: %s" % SCRAPYDASH_PORT
 
     check_assert('ENABLE_AUTH', False, bool)
     if config.get('ENABLE_AUTH', False):
@@ -90,11 +90,11 @@ def check_app_config(config):
         logger.info("Running in HTTPS mode: %s, %s", config['CERTIFICATE_FILEPATH'], config['PRIVATEKEY_FILEPATH'])
 
     _protocol = 'https' if config.get('ENABLE_HTTPS', False) else 'http'
-    _bind = config.get('SCRAPYDWEB_BIND', '0.0.0.0')
+    _bind = config.get('SCRAPYDASH_BIND', '0.0.0.0')
     _bind = '127.0.0.1' if _bind == '0.0.0.0' else _bind
-    config['URL_SCRAPYDWEB'] = '%s://%s:%s' % (_protocol, _bind, config.get('SCRAPYDWEB_PORT', 5000))
-    handle_metadata('url_scrapydweb', config['URL_SCRAPYDWEB'])
-    logger.info("Setting up URL_SCRAPYDWEB: %s", config['URL_SCRAPYDWEB'])
+    config['URL_SCRAPYDASH'] = '%s://%s:%s' % (_protocol, _bind, config.get('SCRAPYDASH_PORT', 5000))
+    handle_metadata('url_scrapydash', config['URL_SCRAPYDASH'])
+    logger.info("Setting up URL_SCRAPYDASH: %s", config['URL_SCRAPYDASH'])
 
     # Scrapy
     check_assert('SCRAPY_PROJECTS_DIR', '', str)
@@ -299,7 +299,7 @@ def check_app_config(config):
         password = config.get('PASSWORD', '')
         kwargs = dict(
             # 'http(s)://127.0.0.1:5000' + '/1/jobs/'
-            url_jobs=config['URL_SCRAPYDWEB'] + handle_metadata().get('url_jobs', '/1/jobs/'),
+            url_jobs=config['URL_SCRAPYDASH'] + handle_metadata().get('url_jobs', '/1/jobs/'),
             auth=(username, password) if username and password else None,
             nodes=list(range(1, len(config['SCRAPYD_SERVERS']) + 1))
         )
@@ -322,7 +322,7 @@ def check_app_config(config):
         username = config.get('USERNAME', '')
         password = config.get('PASSWORD', '')
         kwargs = dict(
-            url=config['URL_SCRAPYDWEB'] + handle_metadata().get('url_delete_task_result',
+            url=config['URL_SCRAPYDASH'] + handle_metadata().get('url_delete_task_result',
                                                                  '/1/tasks/xhr/delete/1/2/'),
             auth=(username, password) if username and password else None,
         )
@@ -431,7 +431,7 @@ def check_scrapyd_connectivity(servers):
 
 def check_slack_telegram(config, service):
     logger.debug("Trying to send %s..." % service)
-    text = '%s alert enabled #scrapydweb' % service.capitalize()
+    text = '%s alert enabled #scrapydash' % service.capitalize()
     alert = "Fail to send text via %s, you may need to set 'ENABLE_%s_ALERT = False'" % (
         service.capitalize(), service.upper())
     if service == 'slack':
@@ -469,7 +469,7 @@ def check_email(config):
         smtp_connection_timeout=config.get('SMTP_CONNECTION_TIMEOUT', 30),
     )
     kwargs['to_retry'] = True
-    kwargs['subject'] = 'Email alert enabled #scrapydweb'
+    kwargs['subject'] = 'Email alert enabled #scrapydash'
     kwargs['content'] = json_dumps(dict(EMAIL_SENDER=config['EMAIL_SENDER'],
                                         EMAIL_RECIPIENTS=config['EMAIL_RECIPIENTS']))
 

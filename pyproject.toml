@@ -3,22 +3,22 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "scrapydweb"
+name = "scrapydash"
 version = "1.6.0"
 description = "Web app for Scrapyd cluster management, with support for Scrapy log analysis & visualization."
 readme = "README.md"
 license = "GPL-3.0"
 authors = [
-    { name = "my8100", email = "my8100@gmail.com" }
+    { name = "EmanueleCannizzaro0", email = "EmanueleCannizzaro0@gmail.com" }
 ]
 maintainers = [
-    { name = "my8100", email = "my8100@gmail.com" }
+    { name = "EmanueleCannizzaro0", email = "EmanueleCannizzaro0@gmail.com" }
 ]
 keywords = ["scrapy", "scrapyd", "web", "monitoring", "cluster", "management"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
-    "Framework :: Flask",
+    "Framework :: FastAPI",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
@@ -100,21 +100,21 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/my8100/scrapydweb"
-Repository = "https://github.com/my8100/scrapydweb"
-Documentation = "https://github.com/my8100/scrapydweb/blob/master/README.md"
-"Bug Tracker" = "https://github.com/my8100/scrapydweb/issues"
-Changelog = "https://github.com/my8100/scrapydweb/blob/master/HISTORY.md"
+Homepage = "https://github.com/EmanueleCannizzaro0/scrapydash"
+Repository = "https://github.com/EmanueleCannizzaro0/scrapydash"
+Documentation = "https://github.com/EmanueleCannizzaro0/scrapydash/blob/master/README.md"
+"Bug Tracker" = "https://github.com/EmanueleCannizzaro0/scrapydash/issues"
+Changelog = "https://github.com/EmanueleCannizzaro0/scrapydash/blob/master/HISTORY.md"
 
 [project.scripts]
-scrapydweb = "scrapydweb.run:main"
+scrapydash = "scrapydash.run:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["scrapydweb"]
+packages = ["scrapydash"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "/scrapydweb",
+    "/scrapydash",
     "/tests",
     "/README.md",
     "/HISTORY.md",
@@ -157,6 +157,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+norecursedirs = ["scrapydash/utils"]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",
@@ -164,12 +165,12 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["scrapydweb"]
+source = ["scrapydash"]
 omit = [
     "*/tests/*",
     "*/test_*",
     "setup.py",
-    "scrapydweb/data/*",
+    "scrapydash/data/*",
 ]
 
 [tool.coverage.report]
@@ -235,4 +236,9 @@ dev-dependencies = [
     "flake8>=4.0.0",
     "mypy>=0.910",
     "pre-commit>=2.15.0",
+]
+
+[dependency-groups]
+test = [
+    "scrapy>=2.13.3",
 ]

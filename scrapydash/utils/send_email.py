@@ -8,7 +8,7 @@ import sys
 import time
 
 
-logger = logging.getLogger('scrapydweb.utils.send_email')  # __name__
+logger = logging.getLogger('scrapydash.utils.send_email')  # __name__
 logger.setLevel(logging.DEBUG)
 
 
